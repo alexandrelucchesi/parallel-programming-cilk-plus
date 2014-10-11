@@ -1,0 +1,121 @@
+CILK_FOR:
+
+A sintaxe do cilk_for tem limitações, pois deve ser possível computar o espaço
+de iterações antes de executar o loop. Dessa forma, as seguintes restrições
+devem ser seguidas (ver Slide 19 do ISC2012):
+
+- O ÍNDICE ("int i = 0") deve ser do tipo inteiro ou um "iterator" de acesso randômico (ex.:
+  um ponteiro).
+- A CONDIÇÃO deve ser no formato "ÍNDICE RELOP LIMITE" ou "LIMITE RELOP ÍNDICE", onde:
+    * ÍNDICE = um inteiro ou "iterator" de acesso randômico.
+    * RELOP = { !=, <, >, >=, <= }.
+- O LIMITE e o PASSO devem ser avaliados apenas uma vez (imutáveis?).
+- O INCREMENTO (ou decremento) pode ser expressado como:
+    * { ÍNDICE += PASSO
+      , ÍNDICE -= PASSO
+      , ÍNDICE++
+      , ++ÍNDICE
+      , ÍNDICE--
+      , --ÍNDICE
+      , ÍNDICE }
+- O CORPO do for (iterações) deve poder ser executado em paralelo.
+
+
+Por padrão, o "cilk_for" divide o espaço de iterações. No entanto, caso seja
+necessário maior controle acerca da granularidade do espaço de iterações,
+pode-se utilizar o pragma "cilk grainsize", que permite basicamente especificar
+quantas iterações serão atribuídas às threads.
+
+
+CILK_SPAWN:
+
+O "cilk_spawn" denota uma chamada assíncrona de função, fazendo com que a
+execução da função chamadora continue. Além disso, o "cilk_spawn" possibilita a
+recuperação do valor de retorno da chamada assíncrona.
+
+    x = cilk_spawn f(*p++);
+
+No exemplo acima, será atribuída à variável "x" o resultado da chamada à função "f()"
+quando esta retornar.
+
+É importante notar que os argumentos passados para a função criada a partir de
+"cilk_spawn" são avaliados antes do "fork".
+
+É possível criar chamadas assíncronas não apenas de funções, mas também de um
+conjunto de instruções ("expressões lambda"): 
+
+    cilk_spawn [&]{
+        for (int i = 0; i < n; i++)
+            a[i] = 0;
+    } (); // Não esquecer do "()".
+    ...
+    cilk_sync
+
+
+CILK_SYNC:
+
+O "cilk_sync" consiste em um mecanismo de sincronização que se assemelha a
+um "join".
+
+O escopo de uma chamada "cilk_sync" é a função inteira na qual foi declarado e
+existe uma chamada "cilk_sync" implícita no final de uma função.
+
+
+REDUTORES:
+
+- Possibilitam a utilização de regiões compartilhadas sem o uso de "locks":
+    * Funciona para qualquer operação de redução associativa;
+    * As operações não precisam ser comutativas;
+    * O redutor não tem que ser uma variável local ou mesmo ser uma variável.
+
+- Exemplo:
+    // "sum" não está lexicamente associado a um "loop" em particular.
+    cilk::reducer_opadd<float> sum = 0;
+    ...
+    cilk_for(size_t i = 1; i < n; i++)
+        sum += f(i); // Atualiza a soma local.
+    ... = sum.get_value(); // get_value() retorna a soma global.
+
+ 
+SERIAL ELISION
+
+- Para se obter a versão serial de um programa Cilk basta eliminar as palavras
+  chave "cilk_spawn", "cilk_sync" e "cilk_for", o que pode ser feito de forma
+  trivial como:
+    #define cilk_spawn
+    #define cilk_sync
+    #define cilk_for for
+
+- O resultado é um programa serial C/C++ válido.
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+

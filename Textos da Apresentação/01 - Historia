@@ -1,10 +1,24 @@
-Cilk é uma tecnologia para programação multithread, desenvolvida pelo MIT, cuja finalidade é generalizar a semântica da linguagem C introduzindo construções linguísticas para controles paralelos. 
+Cilk é uma tecnologia para programação multithread, desenvolvida pelo MIT, cuja
+finalidade é generalizar a semântica da linguagem C introduzindo construções
+linguísticas para controles paralelos. 
 
-A filosofia por traś do Cilk é que o programador deve concentrar-se em estruturar seus programas de forma a explorar paralelismo e localidade, deixando para o Cilk a responsabilidade de escalonar ou agendar tarefas, em tempo de execução, para executar de forma eficiente em determinadas plataformas. O Cilk cuida de detalhes como balanceamento de carga, sincronização e protocolos de comunicação. 
+A filosofia por trás do Cilk é que o programador deve se concentrar em
+estruturar seus programas de forma a explorar paralelismo e localidade,
+deixando para o Cilk a responsabilidade de escalonar ou agendar tarefas, em
+tempo de execução, para executar de forma eficiente em determinadas
+plataformas. O Cilk cuida de detalhes como balanceamento de carga,
+sincronização e protocolos de comunicação. 
 
-Importantes marcos na teconlogia Cilk incluem o Cilk-1, que proporcionou um suporte eficiente de """"work-stealing""""; 
-o Cilk-5, com estensões simples para multithread em ANSI C; 
-a versão comercial Cilk++, que estendeu o modelo Cilk para C++ e introduziu reduções de hiperobjetos como um modo eficiente para resolver situações em aplicações cuja programação é irregular(simulações N-body, tree search, etc); e
-em 2009, o time da Cilk Arts, que desenvolveu o Cilk++ começou a fazer parte da Intel e teve como resultado, em 2010, o Intel Cilk Plus - alvo da apresentação de hoje - que adicionou estensões para matrizes e foi incorporado ao compilador da intel. 
+Importantes marcos na teconlogia Cilk incluem o Cilk-1, que proporcionou um
+suporte eficiente de """"work-stealing""""; o Cilk-5, com extensões simples
+para multithread em ANSI C; a versão comercial Cilk++, que estendeu o modelo
+Cilk para C++ e introduziu reduções de hiperobjetos, como um modo eficiente para
+resolver situações em aplicações cuja programação é irregular (simulações
+N-body, tree search, etc); e em 2009, o time da Cilk Arts, que desenvolveu o
+Cilk++ começou a fazer parte da Intel e teve como resultado, em 2010, o Intel
+Cilk Plus - alvo da apresentação de hoje - que adicionou extensões para
+matrizes e foi incorporado ao compilador da Intel.
 
-Cabe ressaltar que, após algum tempo, a Intel publicou as especificações da linguagem para permitir a outros compiladores implementarem o Cilk Plus.
+Cabe ressaltar que, após algum tempo, a Intel publicou as especificações da
+linguagem para permitir a outros compiladores implementarem o Cilk Plus.
+
