@@ -79,9 +79,9 @@ REDUTORES:
  
 SERIAL ELISION
 
-- Para se obter a versão serial de um programa Cilk basta eliminar as palavras
-  chave "cilk_spawn", "cilk_sync" e "cilk_for", o que pode ser feito de forma
-  trivial como:
+- Para se obter a versão serial de um programa Cilk basta eliminar as
+  palavras-chave "cilk_spawn", "cilk_sync" e "cilk_for", o que pode ser feito de
+  forma trivial como:
     #define cilk_spawn
     #define cilk_sync
     #define cilk_for for
