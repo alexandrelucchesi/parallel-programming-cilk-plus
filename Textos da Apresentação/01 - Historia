@@ -20,5 +20,7 @@ Cilk Plus - alvo da apresentação de hoje - que adicionou extensões para
 matrizes e foi incorporado ao compilador da Intel.
 
 Cabe ressaltar que, após algum tempo, a Intel publicou as especificações da
-linguagem para permitir a outros compiladores implementarem o Cilk Plus.
+linguagem para permitir a outros compiladores implementarem o Cilk Plus. 
+Atualmente, então, o compilador intel(icc) possui suporte completo nativo e 
+outros compiladores(gcc, clang) possuim suporte através de instalação auxiliar.
 

@@ -88,7 +88,12 @@ SERIAL ELISION
 
 - O resultado é um programa serial C/C++ válido.
 
-  
+
+NOTAÇÃO DE MATRIZES E FUNÇÕES ELEMENTARES
+
+- Cilk Plus estende o C e C++ para notação de matrizes e funções elementares, o qual 
+  permite ao programador especificar seções da matriz, realizar operações com essas 
+  seções e até operações escalares aplicadas em vetores.
 
 
 
