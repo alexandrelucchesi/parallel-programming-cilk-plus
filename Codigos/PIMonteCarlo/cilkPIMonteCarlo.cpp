@@ -10,9 +10,8 @@
 //#define cilk_sync
 //#define cilk_for for
 
-/*
- *NÃO ESTÁ GERANDO O MESMO RESULTADO NESSA DESGRAÇA E O CILK É UM MILHÃO DE VEZES PIOR - CONSERTER OU IMPLEMENTAR OUTRO!!!
- */
+//NÃO ESTÁ GERANDO O MESMO RESULTADO NESSA DESGRAÇA 
+//E O CILK É UM MILHÃO DE VEZES PIOR - CONSERTAR OU IMPLEMENTAR OUTRO!!!
 
 int main(int argc, char** argv){
 	double x;
