@@ -3,13 +3,14 @@
 #include<cilk/cilk.h>
 #include<omp.h>
 //#define cilk_for for
-
 int main(int argc, char** argv){
 	int n,i,j,cont;
 	float* vector;
 	float* result;
 	float* tmp;
 	double time;
+
+//Uma porcaria o tempo de execução no PC testado
 
 //Size of the vector
 	scanf("%d",&n);
