@@ -11,7 +11,7 @@
 //#define cilk_sync
 //#define cilk_for for
 
-// FUNCIONA BEM!
+// WORKS WELL!
 
 int main(int argc, char** argv){
 	double timeZero, serialTime, cilkTime, openmpTime;
@@ -19,7 +19,7 @@ int main(int argc, char** argv){
 	int n,t, scalar;
 	int i,j,k,in,jn;
         if(argc!=3){
-		printf("Dois argumentos: <Tamanho Matriz> <Nr Threads>\n");
+		printf("Two arguments: <Matrix Size> <Nr of Threads>\n");
                 return(0);
         }
 
@@ -27,36 +27,33 @@ int main(int argc, char** argv){
 	t = strtol(argv[2],NULL,10);
 
 	srand((unsigned)time(NULL));
-	printf("Matriz A: %d x %d\nMatriz B: %d x %d\n",n,n,n,n);
 
-//Alocando o espaço da galera
+//Space allocation
 	mA = (int *) calloc(n*n, sizeof(int));
 	mCcilk = (int *) calloc(n*n, sizeof(int));
 	mCserial = (int *) calloc(n*n, sizeof(int));
 	mCopenmp = (int *) calloc(n*n, sizeof(int));
 
 	if((!mA)&&(!mCcilk)&&(!mCserial)){
-		printf("Memória insuficiente");
+		printf("Insufficient memory!");
 		return(0);
 	}
 
-//Populando as matrizes
-
+//Input values
 	cilk_for(i=0;i<n*n;i++){
 		mA[i] = rand() % MAX ;
 	}
 	scalar = rand() % MAX ;
+	printf("Scalar value: %d\n",scalar);
 
-	printf("Scalar multiplicador: %d\n",scalar);
-
-//MultiplicaÇão para humanos:
+//Serial version
 	timeZero = omp_get_wtime();
 	for(i=0;i<n*n;i++){
 		mCserial[i] = mA[i] * scalar;
 	}
 	serialTime = omp_get_wtime() - timeZero;
 
-//Mutliplicação utilizando openmp
+//Openmp version
         timeZero = omp_get_wtime();
 #pragma omp parallel for num_threads(t)
         for(i=0;i<n*n;i++){
@@ -64,11 +61,12 @@ int main(int argc, char** argv){
         }
         openmpTime = omp_get_wtime() - timeZero;
 
+//How to change the numer of threads in Cilk Plus
 	__cilkrts_end_cilk();  
 	__cilkrts_set_param("nworkers", ""+t);
 
 
-	//Muloipilcação utilizando cilkplus
+//Cilk Plus version
 	timeZero = omp_get_wtime();
 	cilk_for(i=0; i<n*n; i++){
 		mCcilk[i] = mA[i] * scalar;		
@@ -76,18 +74,18 @@ int main(int argc, char** argv){
 	cilkTime = omp_get_wtime() - timeZero;
 
 /*
- * Multiplicação utilizando notação de array... Não funciona com alocação dinâmica!!!
+ * Array notation... Doesn't works with dynamic allocation!!!
 		rCilk[:] = matrizA[:] * scalar ;
 	cilkTime = omp_get_wtime() - timeZero;
 */
 
 
-	printf("Tempo do algoritmo serial: %.5lf\n\n",serialTime);
-	printf("Tempo do algoritmo openmp: %.5lf\n",openmpTime);
-	printf("Speedup alcançado  openmp: %.2lf\n\n",serialTime/openmpTime);
-	printf("Tempo do algoritmo cilk:   %.5lf\n",cilkTime);
-	printf("Speedup alcançado no cilk: %.2lf\n",serialTime/cilkTime);
-
+	printf("Serial time:    %.5lf\n\n",serialTime);
+	printf("OpenMP time:    %.5lf\n",openmpTime);
+	printf("Openmp speedup: %.2lf\n\n",serialTime/openmpTime);
+	printf("Cilk time:      %.5lf\n",cilkTime);
+	printf("Cilk speedup:   %.2lf\n",serialTime/cilkTime);
+/*
 	if(n<50){
                 printf("Matriz A:\n");
                 for(i=0;i<n;i++){
@@ -120,7 +118,7 @@ int main(int argc, char** argv){
                 }
 
 	}
-	
+*/	
 	free(mA);
 	free(mCcilk);
 	free(mCserial);
