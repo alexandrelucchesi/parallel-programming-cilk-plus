@@ -61,7 +61,7 @@ int main(int argc, char** argv){
         }
         openmpTime = omp_get_wtime() - timeZero;
 
-//How to change the numer of threads in Cilk Plus
+//How to change the number of threads in Cilk Plus
 	__cilkrts_end_cilk();  
 	__cilkrts_set_param("nworkers", ""+t);
 
