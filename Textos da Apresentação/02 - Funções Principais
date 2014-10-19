@@ -225,6 +225,52 @@ NOTAÇÃO DE MATRIZES E FUNÇÕES ELEMENTARES
 	__sec_reduce_any_zero
 	__sec_reduce_any_nonzero
 
+FUNÇÕES ELEMENTARES
+  - Funções elementares são construções com funcionamento paralelo de dados. Se dá em três
+    etapas:
+      - O programador escreve uma função que usa valores escalares de uma operação a ser
+        realizada em um único elemento.
+      - O programador adiciona um atributo ao vetor, com cláusulas opcionais, para que o 
+        compilador gere uma variante vetorizada da função, que irá operar em um vetor de
+        elemento de uma única vez.
+      - O programador chama a função para para operar em vários valores ao invés de um só.
 
+  - Semântica:
+    A semântica de uma função elementar é que a sua ordem de execução é fora de ordem da
+    sua sequência de invocação.
+    Obs: O compilador gera três versões do código em código de máquina.
+      - 1: Versão que opera em um único elemento.
+      - 2: Versão para vetores curtos em vários elementos de cada vez.(Varia pelos 
+           argumentos)
+      - 3: Versão com argumento adicional que é uma máscara para tratar casos onde a 
+           chamada de função ocorreu sob um branches na execução.
 
+  - O atributo vector
+    É uma atribuição de uso geral, aplicável a funções que aparece de forma diferente em 
+    cada plataforma. __declspec(vector), __attribute__, etc.
+    Para cada atribuição, uma variação da função vetorizada é criada. 
+  - A cláusula processor
+    Instrui o compilador a criar uma versão vetorizada da função direcionada para
+    determinado processador. 
+  - A cláusula vectorlength
+    Instrui o compilador que cada chamada local deve executar a computação equivalente a n
+    vezes  a execução da função escalar. ( NÃO ENTENDI ESSA )
+    (Original: The vectorlength clause tells the compiler that each routine invocation at 
+    the call site should execute the computation equivalent to n times the scalar function
+    execution.)
+  - A cláusula uniform
+    Instrui o compilador que tais argumentos podem ser distribuídos para todas as 
+    iterações como forma de otimizar o desempenho.
+  - A cláusula linear
+    Instrui ao compilador que invocações consecutivas seguem padrões em seus parâmetros.
+    ( parametro1 no passo 1, parametro 2 no passo 2, etc )
+  - A cláusula mask
+    Instrui o compilador a gerar uma máscara no vetor da execução.
 
+SIMD LOOPS ( CONFIRMAR COM O GEORGE SE FAZ REALMENTE PARTE DO CILK, OU SE É AUXILIAR )
+
+SIMD é um meio para guiar o compilador a vetorizar loops e funções definidas pelo usuário,
+de forma complementar aquelas já feitas automaticamente. A responsabilidade pela
+vetorização, nesse caso, é do programador. 
+
+( SE TIVER REALMENTE QUE FALAR, PEGAR MAIS MATERIAL PARA COMPLETAR )
