@@ -167,22 +167,63 @@ NOTAÇÃO DE MATRIZES E FUNÇÕES ELEMENTARES
 				// para as posições pares de B
 
 
+  - Operações aritméticas
+    Operações aritméticas em seções de arrays são aplicadas a cada elemento da seção.
 
-
-
-
-
-
-
-
-
-
-
-
-
+    Exemplos:
     
+    A[:] = 1.0;				// Todos os elementos de A recebem valor 1.0
 
+    A[0:3][0:3] = B[0]; 	        // A seção 3x3 de A recebe o valor contido em B[0]
 
+    C[:] = A[:] + B[:];			// Soma de cada um de todos os elementos de A e B 
+					// salvos em C
+
+    C[20:10] = A[10:10] + B[0:10];	// Soma os elementos de 10 a 19 de A com os
+					// elementos de 0 a 9 de B e salva em C nas
+					// posições de 20 a 29
+
+    C[20:10][0] = A[10:10][2] + B[0:10][3];	// Exemplo anterior para duas dimensões
+
+    C[0:9][0][0:9] = A[0][0:9][0:9] + B[0:9][0:9][4];	//Exemplo alternando as dimensões
+
+    A[:] *= 2;				// Multiplicando todos elementos de A por 2
+
+    A[:]++;				// Adicionando 1 para todos os elementos de A
+
+    A[:] = B[:] == C[:];		// A é um array de booleanos
+
+    A[0:2][0:2] = B[0:2];		// Erro! O número de dimensões não casa
+
+  - Chamadas de função
+    Se uma função é chamada com uma seção de um array como argumento, a função é mapeada
+    ou é chamada com os elementos sucessivos desse array.
+    Exemplo:
+
+	type fnc(type arg1, type2 arg2);
+	type A[N], C[N];
+	type2 B[N];
+	C[x:y:z] = fnc(A[x:y:z], B[x:y:z]);
+
+    A função fnc é mapeada para a seção do array A e B. A função será então chamada com os
+    argumentos (A[x], B[x]), com os argumentos (A[x+z],B[x+z]), etc. E, então, os
+    resultados serão coletados para a respectiva seção em C.
+    
+  - Operações de Redução
+    Operações de redução funcionam de forma similar as reduções das hiperoperações e são
+    executadas somente para a seção do array.
+
+    Tabela de operações de redução:
+	__sec_reduce_add
+	__sec_reduce_mul
+	__sec_reduce_max
+	__sec_reduce_min
+	__sec_reduce_max_ind
+	__sec_reduce_min_ind
+	__sec_reduce_all_zero
+	__sec_reduce_all_nonzero
+	__sec_reduce_any_zero
+	__sec_reduce_any_nonzero
 
 
 
