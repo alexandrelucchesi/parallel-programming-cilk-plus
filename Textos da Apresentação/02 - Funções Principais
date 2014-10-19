@@ -59,23 +59,6 @@ um "join".
 
 O escopo de uma chamada "cilk_sync" é a função inteira na qual foi declarado e
 existe uma chamada "cilk_sync" implícita no final de uma função.
-
-
-REDUTORES:
-
-- Possibilitam a utilização de regiões compartilhadas sem o uso de "locks":
-    * Funciona para qualquer operação de redução associativa;
-    * As operações não precisam ser comutativas;
-    * O redutor não tem que ser uma variável local ou mesmo ser uma variável.
-
-- Exemplo:
-    // "sum" não está lexicamente associado a um "loop" em particular.
-    cilk::reducer_opadd<float> sum = 0;
-    ...
-    cilk_for(size_t i = 1; i < n; i++)
-        sum += f(i); // Atualiza a soma local.
-    ... = sum.get_value(); // get_value() retorna a soma global.
-
  
 SERIAL ELISION
 
@@ -88,20 +71,100 @@ SERIAL ELISION
 
 - O resultado é um programa serial C/C++ válido.
 
+HIPEROBJETOS
+
+- Cilk define uma categoria de objetos chamados hiperobjetos, que são aqueles que possibilitam
+  o acesso thread-safe a objetos compartilhados dando a cada thread uma instância do objeto.
+
+    REDUTORES:
+
+    A maioria dos hiperobjetos são da categoria redutores.  Cada tipo de redutor fornece uma
+    operação de redução que mescla dois views para o redutor. Isso possibilita a utilização 
+    de regiões compartilhadas sem o uso de "locks":
+        * Funciona para qualquer operação de redução associativa;
+        * As operações não precisam ser comutativas;
+        * O redutor não tem que ser uma variável local ou mesmo ser uma variável.
+
+    - Exemplo:
+        // "sum" não está lexicamente associado a um "loop" em particular.
+        cilk::reducer_opadd<float> sum = 0;
+        ...
+        cilk_for(size_t i = 1; i < n; i++)
+            sum += f(i); // Atualiza a soma local.
+        ... = sum.get_value(); // get_value() retorna a soma global.
+
+- Hiperojbetos possuem diferentes sintaxes e comportamentos em C e c++ 
+	( não sei vale a pena falar muito aqui, só falar que é )
+
 
 NOTAÇÃO DE MATRIZES E FUNÇÕES ELEMENTARES
 
 - Cilk Plus estende o C e C++ para notação de matrizes e funções elementares, o qual 
-  permite ao programador especificar seções da matriz, realizar operações com essas 
-  seções e até operações escalares aplicadas em vetores.
+  permite ao programador especificar seções da matriz da qual farão acesso. Isso ajuda
+  ao compilador na realização de vetorização e autoparalelização. Um detalhe importante
+  é que a notação de array não funciona para alocação dinâmica. :(
 
+- A expressão de seção: 
+    As expressões de seções selecionam múltiplos arrays de elementos para operações 
+    de dados paralela.
+    
+    A sintaxe é a seguinte:
+	[início:tamanho:passo]
 
+    A seqüência de expressões são delimitadas pelos colchetes que é denominada tripla
+    (mesmo quando há menos de três expressões). As expressões em um trio são 
+    interpretados, respectivamente, como: início, tamanho e passo. Cada trio secção 
+    representa uma seqüência de valores subscritos, a partir do início, com n elementos de
+    tamanho, onde cada um distancia-se pelo passo como segue:
+      inicio, inicio+passo, inicio+passo*2, ..., inicio+passo*(tamanho-1)
 
+    As expressões de seção, deverão seguem as seguintes regras:
+      - Se não há passo, o valor do mesmo é 1. 
+      - Quanto a tripla não contém expressões, o valor de início é zero e o valor do 
+      tamanho é o número de elementos contidos no array. 
+      - Se o passo é negativo, o valor de início deverá indica o índice mais alto.
+      - Se o tamanho é menor ou igual a zero, a sequencia é vazia.
 
+    Cada expressão possui um rank que ditam as regras de operações que podem ser
+    ser realizadas com aquele vetor. ( Não sei se vale a pena explorar todas as regras )
 
+    Dadas as condições de expressões de seção, seguem alguns exemplos utilizando as 
+    mesmas:
 
+    int *ponteiro;
+    int Matriz[i][j];
+    ponteiro[:] = ...	// Não é uma operação válida por não haver tamanho declarado.
+    Matriz[:][:] = ... 	// Matriz bidimensional.
+    ponteiro[1:5] = ... // ponteiro[1],ponteiro[2], ... ponteiro[5].
+    Matriz[0:5][0:7]; 	// Referem-se aos 35 elementos de uma matriz bidimensional.
 
+- Operações com expressões de seção
+  - Atribuição
+    É uma operação paralela que modifica todos os elemntos da seção da matriz do lado 
+    esquerdo.
+    Se uma seção do lado direito não casa com a seção do lado esquerdo, a substituição não
+    é completa e o comportamento é indefinido:
 
+    Exemplos que terão resultados indefinidos:
+    a[0:10] = a[10:10];		// no overlap; well-defined
+    a[0:10:2] = a[1:10:2];	// no overlap; well-defined
+    a[0:10] = a[0:10] + 1;	// complete overlap; well-defined
+    a[0:10] = a[1:10]; 		// incomplete overlap; undefined
+
+    Exemplos válidos:
+
+    B[0:10] = A[10:20];		// Copia os elementos de 10 a 19 em A 
+				// para 0 a 9 em B
+
+    B[0:10][0] = A[0][0:10];	// Transpõe a linha 0, colunas 0-9 de A
+				// para a coluna 0, linhas 0-9 de B
+
+    B[0:10][0][0][0:5] = A[3][0:10][0:5][5]; 
+				// Copia uma seção da segunda e tereceira dimensão de A
+				// para a primeira e quarta dimensão de B
+
+    B[0:5:2] = A[0:5];		// Copia os cinco elementos de A
+				// para as posições pares de B
 
 
 
