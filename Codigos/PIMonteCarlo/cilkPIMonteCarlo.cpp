@@ -9,10 +9,9 @@
 //#define cilk_spawn
 //#define cilk_sync
 //#define cilk_for for
-
-//NÃO ESTÁ GERANDO O MESMO RESULTADO NESSA DESGRAÇA 
+//NÃO ESTÁ GERANDO O MESMO RESULTADO NESSA DESGRAÇA
 //E O CILK É UM MILHÃO DE VEZES PIOR - CONSERTAR OU IMPLEMENTAR OUTRO!!!
-
+//Dfine uma seed.
 int main(int argc, char** argv){
 	double x;
 	double y;
@@ -22,7 +21,7 @@ int main(int argc, char** argv){
 	struct timeval ini, fim;
 	long long unsigned duracao;
 	unsigned id;
-	
+
 	cilk::reducer_opadd<long long int> cont;
 
 	gettimeofday(&ini,NULL);
@@ -32,6 +31,7 @@ int main(int argc, char** argv){
 		printf("Use ./program <numero de threads> <numero de pontos>\n");
 		return(0);
 	}
+	srand(1337);
 	numThreads = strtol(argv[1],NULL,10);
 	pontos = strtol(argv[2],NULL,10);
 
@@ -50,6 +50,6 @@ int main(int argc, char** argv){
         duracao = (long long unsigned)((fim.tv_sec*1000000 + fim.tv_usec)-(ini.tv_sec*1000000 + ini.tv_usec));
 	printf("%f\n",(double)4*cont.get_value()/(double)pontos);
 	printf("%lld\n",duracao);
-        
+
 	return(0);
 }
