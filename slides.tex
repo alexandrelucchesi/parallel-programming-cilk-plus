@@ -263,11 +263,11 @@ cilk_sync;
 
 \begin{frame}[fragile]{\textit{Serial Elision}}
 \begin{itemize}
-    \item O Cilk Plus é uma linguagem pouco intrusiva quando comparada, por
-    exemplo, ao OpenMP;
-    \item Isso fica explícito quando se deseja obter a versão serial
-    (\textit{serial elision}) de um programa Cilk Plus: basta eliminar as
-  palavras-chave \texttt{cilk\_spawn}, \texttt{cilk\_sync} e \texttt{cilk\_for};
+    \item O Cilk Plus, de uma forma geral, é uma linguagem pouco intrusiva;
+    \item Isso fica explícito quando se deseja, por exemplo, obter a versão
+    serial (\textit{serial elision}) de um programa Cilk Plus: basta eliminar as
+    palavras-chave \texttt{cilk\_spawn}, \texttt{cilk\_sync} e
+    \texttt{cilk\_for};
     \item De forma trivial:
 \begin{lstlisting}
 #define cilk_spawn
