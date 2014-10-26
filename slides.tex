@@ -291,11 +291,13 @@ cilk_sync;
 \subsection{Vantagens}
 \begin{frame}{Vantagens}
 \begin{itemize}
-    \item Diretivas básicas bem definidas e de uso trivial.
-    \item Modelo de trabalho com \textit{arrays} na forma de\textit{Syntax Sugar}.
-    \item Focada em otimizar resultados em processadores da Intel$\circledR$.
-    \item Implementa SIMD.
-    \item Proporciona um meio onde programador não precisa se preocupar com quase nada.
+    \item Diretivas básicas bem definidas e de uso trivial;
+    \item \textit{Syntactic sugar} para manipulação de \textit{arrays};
+    \item Focada em otimizar resultados em processadores da
+    Intel\textsuperscript{\textregistered};
+    \item Implementa SIMD;
+    \item Proporciona um meio onde o programador não precisa se preocupar com
+    quase nada.
 \end{itemize}
 
 \end{frame}
@@ -303,10 +305,11 @@ cilk_sync;
 \subsection{Desvantagens}
 \begin{frame}{Desvantagens}
 \begin{itemize}
-    \item Dificuldade de se instalar.
+    \item Dificuldade de se instalar;
 % Esse ítem aqui acho que tá errado, já que ela usa Serial Elision e funciona de forma similar ao OPENMP
 %    \item Muito invasiva, necessita de modificações no compilador e faz alterações na própria sintaxe.
-    \item Manipulação de recursos(\textit{workers} por exemplo) não é nativo da ferramenta
+    \item Manipulação de recursos (ex.: \textit{workers}) não é nativa da
+    ferramenta.
 % COMENTAR, MAS NÃO ESCREVER ISSO EXPLICITAMENTE - São necessárias verdadeiras gambiarras para modificar, por exemplo, o número de threads.
     \item Complicado de se otimizar.
 \end{itemize}
