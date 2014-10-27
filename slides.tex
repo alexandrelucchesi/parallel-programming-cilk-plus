@@ -453,7 +453,7 @@ printf("Soma: %d\n",sum.get_value());
     a[0:10] = a[10:10];		// sem sobreposição; bem definida
     a[0:10:2] = a[1:10:2];	// sem sobreposição; bem definida
     a[0:10] = a[0:10] + 1;	// com sobreposição; bem definida
-    a[0:10] = a[1:10]; 		// sobreposição imcompleta; comportamento indefinido
+    a[0:10] = a[1:10]; 		// sobreposição incompleta; comportamento indefinido
 \end{verbatim}
 \end{block}
 \pause
@@ -501,10 +501,8 @@ C[0:9][0][0:9] = A[0][0:9][0:9] + B[0:9][0:9][4];
 \end{tiny}
 \end{column}
 \end{columns}
-
 \end{block}
 \end{tiny}
-
 \end{frame}
 }
 \begin{frame}[fragile]{Notações Matriciais}
@@ -576,6 +574,34 @@ for(int i = 0; i < n; i++){
 \end{block}
 \end{frame}
 
+\subsubsection{Funções Elementares}
+\begin{frame}{Funções Elementares}
+    Funções Elementares são construções com funcionamento paralelos de dados.
+    Ocorre em três etapas:
+\begin{enumerate}
+    \item É escrito uma função que utiliza valores escalares de uma operação para um único elemento.
+\pause
+    \item Adiciona-se um atributo ao vetor para que o compilador gere uma variante vetorizada da função.
+\pause
+    \item Chama-se a função que irá operar em vários valores de uma só vez.
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Funções Elementares}
+\begin{block}{Semântica}
+    Sua ordem de execução é fora da ordem da sua sequência de invocação, 
+\end{block}
+\begin{enumerate}
+    \item É escrito uma função que utiliza valores escalares de uma operação para um único elemento.
+\pause
+    \item Adiciona-se um atributo ao vetor para que o compilador gere uma variante vetorizada da função.
+\pause
+    \item Chama-se a função que irá operar em vários valores de uma só vez.
+\end{enumerate}
+
+\end{frame}
+
 %ESSE TÓPICO DEVERIA FICAR APÓS TODAS AS EXPLICAÇÕES E ANTES DOS EXEMPLOS - O QUE ACHAM???
 \subsection{Serial Elision}
 \begin{frame}[fragile]{\textit{Serial Elision}}
@@ -634,6 +660,9 @@ for(int i = 0; i < n; i++){
 
 \end{frame}
 
+\begin{frame}
+teste de bibliografia\cite{doge}
+\end{frame}
 
 \section{Conclusão}
 \begin{frame}%[allowframebreaks]
