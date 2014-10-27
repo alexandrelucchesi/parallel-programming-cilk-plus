@@ -315,11 +315,11 @@ Arquivos \\
 
 \begin{frame}[fragile]{Hiperobjetos}
     Tais operações possibilitam a utilização de regiões compartilhadas sem o uso de \textit{locks}, com as seguintes características:
-    \begin{itemize}
-	    \item Funciona para qualquer operação de redução associativa.
-	    \item As operações não precisam ser comutativas.
-        \item O redutor não necessita ser uma variável local.
-    \end{itemize}
+\begin{itemize}
+	\item Funciona para qualquer operação de redução associativa.
+    \item As operações não precisam ser comutativas.
+    \item O redutor não necessita ser uma variável local.
+\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Hiperobjetos}
@@ -392,13 +392,13 @@ printf("Soma: %d\n",sum.get_value());
 \begin{frame}{Notações Matriciais}
 \begin{block}{Expressões de Seção}
     Expressões de Seção seguem as seguintes regras:
-    \begin{itemize}
-	    \item Se não há passo, o valor do mesmo é 1.
-	    \item Se a tripla não contém expressões, o valor de início é $0$ e o 
-	    valor de tamanho é o número de elementos contidos no \textit{array}.
-	    \item Se o passo é negativo, o valor de início apontara para o índice mais alto.
-	    \item Se o tamanho $\leq 0$, a sequência é vazia.
-    \end{itemize}
+\begin{itemize}
+    \item Se não há passo, o valor do mesmo é 1.
+	\item Se a tripla não contém expressões, o valor de início é $0$ e o 
+	valor de tamanho é o número de elementos contidos no \textit{array}.
+	\item Se o passo é negativo, o valor de início apontara para o índice mais alto.
+	\item Se o tamanho $\leq 0$, a sequência é vazia.
+\end{itemize}
 \end{block}
 
 \end{frame}
@@ -409,16 +409,30 @@ printf("Soma: %d\n",sum.get_value());
     podem ser realizadas com aquele \textit{array}.~\footnote{São diversas as
     regras a respeitos de Expressões de Seção e foge ao escopo do Seminário,
     que é uma apresentação superficial sobre a ferramenta, explorá-las}
-\begin{small}
+\begin{scriptsize}
 \begin{block}{Exemplos de Expressões de Seção}
-    int *ponteiro; \\
-    int Matriz[i][j]; \\ \pause
-    ponteiro[:] = ...; // Não é uma operação válida por não haver tamanho declarado. \\ \pause
-    matriz[:][:] = ...; // matriz bidimensional. \\ \pause
-    ponteiro[1:5] = ...; // ponteiro[1],ponteiro[2], ... ponteiro[5]. \\ \pause
-    matriz[0:5][0:7]; 	// Referem-se aos 35 elementos de uma matriz bidimensional. \\
+\begin{verbatim}
+    int *ponteiro;
+    int Matriz[i][j];
+\end{verbatim}
+\pause
+\begin{verbatim}
+    ponteiro[:] = ...; // Não é uma operação válida por não haver tamanho declarado.
+\end{verbatim}
+\pause
+\begin{verbatim}
+    matriz[:][:] = ...; // matriz bidimensional.
+\end{verbatim}
+\pause
+\begin{verbatim}
+    ponteiro[1:5] = ...; // ponteiro[1],ponteiro[2], ... ponteiro[5].
+\end{verbatim}
+\pause
+\begin{verbatim}
+    matriz[0:5][0:7]; 	// Referem-se aos 35 elementos de uma matriz bidimensional.
+\end{verbatim}
 \end{block}
-\end{small}
+\end{scriptsize}
 \end{frame}
 {
 \renewcommand{\footnotesize}{\tiny} 
