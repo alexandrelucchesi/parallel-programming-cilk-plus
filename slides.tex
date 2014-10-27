@@ -42,16 +42,6 @@
     morekeywords={cilk\_for, cilk\_spawn, cilk\_sync, cilk, grainsize}
 }
 
-\newcommand\tinyfootnote[1]{%
-  \setbeamertemplate{footnote}{%
-    \parindent 1em\noindent%
-    \raggedright
-    \hbox to 1.8em{\hfil\tiny\insertfootnotemark}\tiny\insertfootnotetext\par%
-  }%
-  \footnote{#1}%
-  \setbeamertemplate{footnote}[default]
-}
-
 \begin{document}
 
 \begin{frame}[plain]
@@ -61,7 +51,6 @@
 \begin{frame}[shrink]{Sumário}
     \tableofcontents
 \end{frame}
-
 
 %\section{Introdução}
 %\subsection{O que é}
@@ -531,7 +520,6 @@ for(int i = 0; i < n; i++){
 	Operações de redução em Notações Matriciais funcionam de forma similar
 	aquelas existentes nas hiperoperações, sendo executadas para a seção
 	estipulada do \textit{array}.
-
 \begin{block}{Lista de Operações de Redução}
 \begin{small}
 \begin{small}
