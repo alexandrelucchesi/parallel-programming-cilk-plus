@@ -442,6 +442,20 @@ printf("Soma: %d\n",sum.get_value());
 \end{scriptsize}
 \end{frame}
 
+\begin{frame}[fragile]{Notações Matriciais}
+\framesubtitle{Notação matricial como parâmetro de funções}
+   Esta e uma forma fácil de operar sobre cada elementode um vetor de forma
+   individual. Se resume a passar o vetor com o intervalo, como parâmetro da função
+   e o proprio cilk irá chamar a função (de forma paralela?), para cada elemento.
+\begin{scriptsize}
+\begin{block}{lalalalalala} 
+    int a[100];        \\
+    a = input[0:100];\\
+   processa(a[:]) ;  // void processa(int);\\
+\end{block}
+\end{scriptsize}
+\end{frame}
+
 %ESSE TÓPICO DEVERIA FICAR APÓS TODAS AS EXPLICAÇÕES E ANTES DOS EXEMPLOS - O QUE ACHAM???
 \subsection{Serial Elision}
 \begin{frame}[fragile]{\textit{Serial Elision}}
