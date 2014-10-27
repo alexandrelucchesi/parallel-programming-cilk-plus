@@ -145,7 +145,7 @@ NOTAÇÃO DE MATRIZES E FUNÇÕES ELEMENTARES
     Se uma seção do lado direito não casa com a seção do lado esquerdo, a substituição não
     é completa e o comportamento é indefinido:
 
-    Exemplos que terão resultados indefinidos:
+    Exemplos:
     a[0:10] = a[10:10];		// no overlap; well-defined
     a[0:10:2] = a[1:10:2];	// no overlap; well-defined
     a[0:10] = a[0:10] + 1;	// complete overlap; well-defined
