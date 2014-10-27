@@ -39,7 +39,9 @@
     language=C,
     basicstyle=\ttfamily,
     breaklines=true,
-    morekeywords={cilk\_for, cilk\_spawn, cilk\_sync, cilk, grainsize}
+    morekeywords={cilk\_for, cilk\_spawn, cilk\_sync, cilk, grainsize, 
+    reducer\_opadd, CILK\_C\_REDUCER\_OPADD, CILK\_C\_REGISTER\_REDUCER,
+    REDUCER\_VIEW, CILK\_C\_UNREGISTER\_REDUCER,get\_value}
 }
 
 \begin{document}
@@ -376,14 +378,16 @@ printf("Soma: %d\n",sum.get_value());
 \begin{block}{Expressões de Seção}
     Forma de selecionar múltiplos \textit{arrays} de elementos para operações de dados paralela.
 \begin{block}{Sintaxe}
-    [Início:tamanho:passo]
+    \texttt{[Início:tamanho:passo]}
 \end{block}
     A respectiva tripla representa uma sequência de valores subscritos a partir 
     do \textbf{início}, com $n$ elementos de \textbf{tamanho}, onde cada um 
     distancia-se pelo \textbf{passo}, utilizando a seguinte fórmula:
 \begin{block}{}
     \centering
-    \textit{inicio, inicio$+$passo, inicio$+$passo$*2$,$\ldots$, inicio$+$passo$*$(tamanho$-1$)}
+\begin{small}
+    \texttt{início, início$+$passo, início$+$passo$*2$,$\ldots$, início$+$passo$*$(tamanho$-1$)}
+\end{small}
 \end{block}
 \end{block}
 
@@ -443,12 +447,14 @@ printf("Soma: %d\n",sum.get_value());
     esquerdo.\footnote{Se a operação do lado direito não se associa diretamente
     com os elementos do lado esquerdo, a substituição não é completa e o
     comportamento é indefinido}
-\begin{scriptsize}
+\begin{tiny}
 \begin{block}{Atribuição}
-    a[0:10] = a[10:10];		// sem sobreposição; bem definida \\
-    a[0:10:2] = a[1:10:2];	// sem sobreposição; bem definida \\
-    a[0:10] = a[0:10] + 1;	// com sobreposição; bem definida\\
-    a[0:10] = a[1:10]; 		// sobreposição imcompleta; comportamento indefinido \\
+\begin{verbatim}
+    a[0:10] = a[10:10];		// sem sobreposição; bem definida
+    a[0:10:2] = a[1:10:2];	// sem sobreposição; bem definida
+    a[0:10] = a[0:10] + 1;	// com sobreposição; bem definida
+    a[0:10] = a[1:10]; 		// sobreposição imcompleta; comportamento indefinido
+\end{verbatim}
 \end{block}
 \pause
 \begin{block}{Operações Aritméticas}
@@ -456,9 +462,11 @@ printf("Soma: %d\n",sum.get_value());
 \begin{column}{0.17\textwidth}
 \begin{tiny}
 \begin{block}{}
-    A[:] = 1.0;	\\
-    A[0:3][0:3] = B[0]; \\
-    C[:] = A[:] + B[:];	\\
+\begin{verbatim}
+A[:] = 1.0;	
+A[0:3][0:3] = B[0];
+C[:] = A[:] + B[:];
+\end{verbatim}
 \end{block}
 \end{tiny}
 \end{column}
@@ -466,9 +474,11 @@ printf("Soma: %d\n",sum.get_value());
 \begin{column}{0.42\textwidth}
 \begin{tiny}
 \begin{block}{}
-    C[20:10] = A[10:10] + B[0:10]; \\
-    C[20:10][0] = A[10:10][2] + B[0:10][3];	\\
-    C[0:9][0][0:9] = A[0][0:9][0:9] + B[0:9][0:9][4]; \\
+\begin{verbatim}
+C[20:10] = A[10:10] + B[0:10];
+C[20:10][0] = A[10:10][2] + B[0:10][3];
+C[0:9][0][0:9] = A[0][0:9][0:9] + B[0:9][0:9][4];
+\end{verbatim}
 \end{block}
 \end{tiny}
 \end{column}
@@ -478,18 +488,22 @@ printf("Soma: %d\n",sum.get_value());
 \begin{column}{0.75\textwidth}
 \begin{tiny}
 \begin{block}{}
-    A[:] *= 2; \\ 
-    A[:]++;	\\
-    A[:] = B[:] == C[:]; \\
+\begin{verbatim}
+    A[:] *= 2;
+    A[:]++;
+    A[:] = B[:] == C[:];
+\end{verbatim}
 \pause
+\begin{verbatim}
     A[0:2][0:2] = B[0:2]; // Erro! Problema quanto ao número de dimensões!\\
+\end{verbatim}
 \end{block}
 \end{tiny}
 \end{column}
 \end{columns}
 
 \end{block}
-\end{scriptsize}
+\end{tiny}
 
 \end{frame}
 }
