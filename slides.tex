@@ -42,6 +42,16 @@
     morekeywords={cilk\_for, cilk\_spawn, cilk\_sync, cilk, grainsize}
 }
 
+\newcommand\tinyfootnote[1]{%
+  \setbeamertemplate{footnote}{%
+    \parindent 1em\noindent%
+    \raggedright
+    \hbox to 1.8em{\hfil\tiny\insertfootnotemark}\tiny\insertfootnotetext\par%
+  }%
+  \footnote{#1}%
+  \setbeamertemplate{footnote}[default]
+}
+
 \begin{document}
 
 \begin{frame}[plain]
@@ -421,12 +431,14 @@ printf("Soma: %d\n",sum.get_value());
 \end{block}
 \end{small}
 \end{frame}
+{
+\renewcommand{\footnotesize}{\tiny} 
 
 \begin{frame}[fragile]{Notações Matriciais}
 \framesubtitle{Operações com Expressões de Seção}
     É uma operação paralela para modificar elementos da seção da matriz do lado
     esquerdo.\footnote{Se a operação do lado direito não se associa diretamente
-    com os elementos do lado esquerdo, a substituição não é ocmpleta e o
+    com os elementos do lado esquerdo, a substituição não é completa e o
     comportamento é indefinido}
 \begin{scriptsize}
 \begin{block}{Atribuição}
@@ -437,11 +449,47 @@ printf("Soma: %d\n",sum.get_value());
 \end{block}
 \pause
 \begin{block}{Operações Aritméticas}
-	WTF[:] = WTH[:];
+\begin{columns}
+\begin{column}{0.17\textwidth}
+\begin{tiny}
+\begin{block}{}
+    A[:] = 1.0;	\\
+    A[0:3][0:3] = B[0]; \\
+    C[:] = A[:] + B[:];	\\
+\end{block}
+\end{tiny}
+\end{column}
+\pause
+\begin{column}{0.42\textwidth}
+\begin{tiny}
+\begin{block}{}
+    C[20:10] = A[10:10] + B[0:10]; \\
+    C[20:10][0] = A[10:10][2] + B[0:10][3];	\\
+    C[0:9][0][0:9] = A[0][0:9][0:9] + B[0:9][0:9][4]; \\
+\end{block}
+\end{tiny}
+\end{column}
+\end{columns}
+\pause
+\begin{columns}
+\begin{column}{0.75\textwidth}
+\begin{tiny}
+\begin{block}{}
+    A[:] *= 2; \\ 
+    A[:]++;	\\
+    A[:] = B[:] == C[:]; \\
+\pause
+    A[0:2][0:2] = B[0:2]; // Erro! Problema quanto ao número de dimensões!\\
+\end{block}
+\end{tiny}
+\end{column}
+\end{columns}
+
 \end{block}
 \end{scriptsize}
-\end{frame}
 
+\end{frame}
+}
 \begin{frame}[fragile]{Notações Matriciais}
 \framesubtitle{Notação matricial como parâmetro de funções}
    Esta e uma forma fácil de operar sobre cada elementode um vetor de forma
