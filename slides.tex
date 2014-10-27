@@ -497,7 +497,7 @@ printf("Soma: %d\n",sum.get_value());
 \begin{block}{Função Escalar}
 \begin{lstlisting}
 void funcaoEscalarQualquer(int i) {
-    printf ("%3d", i);
+    printf ("%3d ", i);
 }
 \end{lstlisting}
 \end{block}
@@ -524,6 +524,40 @@ for(int i = 0; i < n; i++){
 
 \end{columns}
 \end{scriptsize}
+\end{frame}
+
+\begin{frame}[fragile]{Notações Matriciais}
+\framesubtitle{Operações de Redução}
+	Operações de redução em Notações Matriciais funcionam de forma similar
+	aquelas existentes nas hiperoperações, sendo executadas para a seção
+	estipulada do \textit{array}.
+
+\begin{block}{Lista de Operações de Redução}
+\begin{small}
+\begin{small}
+\begin{columns}
+\begin{column}{0.45\textwidth}
+\begin{itemize}
+    \item \_\_sec\_reduce\_add
+    \item \_\_sec\_reduce\_mul
+    \item \_\_sec\_reduce\_max
+    \item \_\_sec\_reduce\_min
+    \item \_\_sec\_reduce\_max\_ind
+\end{itemize}
+\end{column}
+\begin{column}{0.45\textwidth}
+\begin{itemize}
+    \item \_\_sec\_reduce\_min\_ind
+    \item \_\_sec\_reduce\_all\_zero
+    \item \_\_sec\_reduce\_all\_nonzero
+    \item \_\_sec\_reduce\_any\_zero
+    \item \_\_sec\_reduce\_any\_nonzero
+\end{itemize}
+\end{column}
+\end{columns}
+\end{small}
+\end{small}
+\end{block}
 \end{frame}
 
 %ESSE TÓPICO DEVERIA FICAR APÓS TODAS AS EXPLICAÇÕES E ANTES DOS EXEMPLOS - O QUE ACHAM???
