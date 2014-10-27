@@ -9,10 +9,16 @@
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{xcolor}
+\usepackage{tikz}
 \usepackage{listings}
 %\usepackage{courier}
 \usepackage[scaled=0.8]{beramono}
 
+%Box color
+%\setbeamercolor{block title example}{fg=blue!50,bg=blue!10}
+%\setbeamercolor{block body example}{fg=blue,bg=blue!5}
+%\setbeamercolor{block title example}{fg=blue,bg=purple}
+%\setbeamercolor{block body example}{fg=blue,bg=blue!5}
 
 \title[Programação Paralela]{Intel Cilk Plus}
 \subtitle{Programação Paralela}
@@ -35,7 +41,6 @@
     breaklines=true,
     morekeywords={cilk\_for, cilk\_spawn, cilk\_sync, cilk, grainsize}
 }
-
 
 \begin{document}
 
@@ -77,17 +82,18 @@
     \item Cilk-5: extensões simples para \textit{multithread} em ANSI C\@;
     \item Cilk++: versão comercial para C++ que introduziu reduções de
     hiperobjetos como técnica eficiente em aplicações cuja programação é
-    irregular (ex: simulações N-body, \textit{tree search}, etc);
+    irregular (ex: simulações \textit{N-body}, \textit{tree search}, etc);
     \item Cilk Plus: adicionou extensões para matrizes e foi incorporado ao
     compilador da Intel~\footnote{Pouco tempo após o lançamento do Cilk Plus, a
     Intel tornou pública as especificações da linguagem, permitindo sua
-    incorporação em outros compiladores. Atualmente, além do compilador
-    \texttt{icc}, o Cilk Plus pode ser encontrado em versões do \texttt{gcc} e
+    incorporação em outros compiladores. Atualmente, além dos compiladores Intel,
+    o Cilk Plus pode ser encontrado em versões do \texttt{gcc} e
     do \texttt{clang} (de forma limitada).}.
 \end{itemize}
 \end{frame}
 
 \section{Funções Principais}
+\subsection{Cilk Plus in a nutshell\ldots}
 \begin{frame}{Cilk Plus \textit{in a nutshell}\ldots}
 \begin{itemize}
     \item Elementos básicos:
@@ -100,19 +106,19 @@
     \item Notação matricial.
 \end{itemize}
 \end{frame}
-
+\subsubsection{cilk\_for}
 \begin{frame}[fragile]{\texttt{cilk\_for}}
 \begin{itemize}
     \item Permite que as iterações sejam executadas em paralelo.
 \end{itemize}
-\begin{exampleblock}{Exemplo}
+\begin{block}{Exemplo}
 \begin{lstlisting}
 void saxpy(float a, float x[], float y[], size_t n) {
     cilk_for (size_t i = 0; i < n; i++)
         y[i] += a * x[i];
 }
 \end{lstlisting}
-\end{exampleblock}
+\end{block}
 \end{frame}
 
 \begin{frame}[fragile]{\texttt{cilk\_for}}
@@ -148,13 +154,10 @@ cilk_for(idx = expr; cond; incr)
 
 \begin{frame}[fragile]{\texttt{cilk\_for}}
 \begin{itemize}
-    \item Por padrão, o \texttt{cilk\_for} divide (\textit{tiles}) o espaço de
-    iterações: 
-    \begin{itemize}
-        \item As \textit{threads} executam todo o \textit{tile};
-        \item Evita sincronizações excessivas.
-    \end{itemize}
-    \item Para casos em que é necessário maior controle acerca da granularidade,
+    \item Como forma de evitar sincronizações execivas, e por padrão, o 
+    \texttt{cilk\_for} divide (\textit{tiles}) o espaço de iterações, fazendo 
+    com que cada \textit{thread} execute um \textit{tile}.
+    \item Para casos onde é necessário maior controle da granularidade,
     pode-se o utilizar o \textbf{\texttt{pragma cilk grainsize}} para
     especificar o tamanho de um \textit{tile}:
 \begin{lstlisting}
@@ -165,19 +168,18 @@ cilk_for (int i = 0; i < n; i++)
 \end{itemize}
 
 \end{frame}
-
-{% Spawn's pic. ;)
-\usebackgroundtemplate{\includegraphics[width=\paperwidth,height=\paperheight]{./img/spawn.jpg}}
-\begin{frame}{\texttt{cilk\_spawn}}
-\end{frame}
+{
+\usebackgroundtemplate{%
+\tikz[overlay,remember picture] \node[opacity=0.025, at=(current page.center)] {
+   \includegraphics[height=\paperheight,width=\paperwidth]{img/spawn.jpg}};
 }
-
+\subsubsection{cilk\_spawn}
 \begin{frame}[fragile]{\texttt{cilk\_spawn}}
 \begin{itemize}
     \item O \texttt{cilk\_spawn} cria e executa uma nova \textit{thread}
     de \textbf{forma assíncrona};
     \item Possui mecanismos que possibilitam a recuperação do valor de retorno
-    da chamada assíncrona~\footnote{Os argumentos passados para a função são
+    da chamada~\footnote{Os argumentos passados para a função são
     avaliados antes do \textit{fork} (\textit{strict evaluation}).}:
 \begin{lstlisting}
 x = cilk_spawn f(*p++);
@@ -192,7 +194,8 @@ cilk_spawn [&]{
 \end{lstlisting}
 \end{itemize}
 \end{frame}
-
+}
+\subsubsection{cilk\_sync}
 \begin{frame}{\texttt{cilk\_sync}}
 \begin{itemize}
     \item O \texttt{cilk\_sync} consiste em um mecanismo de sincronização que se
@@ -261,6 +264,156 @@ cilk_sync;
 \end{columns}
 \end{frame}
 
+\subsection{Hiperobjetos}
+\begin{frame}[fragile]{Hiperobjetos}
+  Hiperojetos possibilitam acesso \textit{thread-safe} a objetos compartilhados,
+  dando a cada \textit{thread} uma instância do objeto.
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+\begin{itemize}
+ \item São em sua maioria redutores e fornecem uma operação que mecla dois \textit{views} para o redutor. 
+\end{itemize}
+\begin{footnotesize}
+\begin{block}{}
+\begin{lstlisting}
+    cilk::reducer_opadd<float> sum = 0;
+    ...
+    cilk_for(size_t i = 1; i < n; i++){
+// Atualiza a soma local.
+        sum += f(i);
+    }
+// get_value() retorna a soma global.
+    result = sum.get_value(); 
+\end{lstlisting}
+\end{block}
+\end{footnotesize}
+
+\end{column}
+
+\begin{column}{0.4\textwidth}
+\begin{footnotesize}
+\begin{block}{Redutores}
+Lists
+
+\qquad list\_append
+
+Listas
+
+\qquad list\_append, list\_prepend
+
+Mínimo e Máximo
+
+\qquad max, max\_index, min, min\_index
+
+Operadores Matemáticos
+
+\qquad add, mul
+
+Operadores bit-a-bit
+
+\qquad and, or, xor
+
+Concatenação de strings
+
+\qquad string, wstring
+
+Arquivos
+
+\qquad ostream
+\end{block}
+\end{footnotesize}
+
+\end{column}
+
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Hiperobjetos}
+  Tais operações possibilitam a utilização de regiões compartilhadas sem o uso de \textit{locks}, com as seguintes características:
+  \begin{itemize}
+	  \item Funciona para qualquer operação de redução associativa.
+	  \item As operações não precisam ser comutativas.
+	  \item O redutor não necessita ser uma variável local.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Hiperobjetos}
+Hiperobjetos possuem diferentes sintaxes e comportamentos em C e C++.
+\begin{columns}[T]
+\begin{column}{0.4\textwidth}
+\begin{tiny}
+\begin{block}{C}
+\begin{lstlisting}
+CILK_C_REDUCER_OPADD(sum, int, 0);
+CILK_C_REGISTER_REDUCER(sum);
+cilk_for(int i = 0; i < 6021023; ++i) {
+    REDUCER_VIEW(sum) += a[i];
+}
+CILK_C_UNREGISTER_REDUCER(sum);
+printf("Soma: %d\n", REDUCER_VIEW(sum));
+\end{lstlisting}
+\end{block}
+\end{tiny}
+\end{column}
+
+\begin{column}{0.4\textwidth}
+
+\begin{tiny}
+\begin{block}{C++}
+\begin{lstlisting}
+cilk::reducer_opadd<int> sum;
+cilk_for (int i = 0; i < 6021023; i++) {
+    sum += i;
+}
+printf("Soma: %d\n",sum.get_value());
+\end{lstlisting}
+\end{block}
+\end{tiny}
+
+\end{column}
+\end{columns}
+\end{frame}
+
+\subsection{Notações Matriciais e Funções Elementares}
+
+\begin{frame}{Notações Matriciais e Funções Elementares}
+\begin{block}{}
+\centering
+O Cilk Plus estende o C/C++ para utilizar Notações Matriciais e Funções Elementares, o qual permite ao programador especificar seções de uma matriz da qual será realizado o acesso. Tal notação auxilia o compilador na realização de vetorização e autoparalelização.
+\end{block}
+\end{frame}
+
+\subsubsection{Notações Matriciais}
+\begin{frame}{Notações Matriciais}
+\begin{block}{Expressões de Seção}
+	Forma de selecionar múltiplos \textit{arrays} de elementos para operações de dados paralela.
+\begin{block}{Sintaxe}
+	[Início:tamanho:passo]
+\end{block}
+A respectiva tripla representa uma sequência de valores subscritos a partir do \textbf{início}, com $n$ elementos de \textbf{tamanho}, onde cada um distancia-se pelo \textbf{passo}, utilizando a seguinte fórmula:
+\begin{block}{}
+\centering
+inicio, inicio+passo, inicio+passo*2,\ldots, inicio+passo*(tamanho-1)
+\end{block}
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Notações Matriciais}
+\begin{block}{Expressões de Seção}
+    Expressões de seção seguem as seguintes regras:
+    \begin{itemize}
+	    \item Se não há passo, o valor do mesmo é 1.
+	    \item Se a tripla não contém expressões, o valor de início é $0$ e o valor de tamanho é o número de elementos contidos no \textit{array}.
+	    \item Se o passo é negativo, o valor de início apontara para o índice mais alto.
+	    \item Se o tamanho $\leq 0$, a sequência é vazia.
+    \end{itemize}
+\end{block}
+
+\end{frame}
+
+%ESSE TÓPICO DEVERIA FICAR APÓS TODAS AS EXPLICAÇÕES E ANTES DOS EXEMPLOS - O QUE ACHAM???
+\subsection{Serial Elision}
 \begin{frame}[fragile]{\textit{Serial Elision}}
 \begin{itemize}
     \item O Cilk Plus, de uma forma geral, é uma linguagem pouco intrusiva;
@@ -299,8 +452,9 @@ cilk_sync;
     \item Proporciona um meio onde o programador não precisa se preocupar com
     quase nada.
 \end{itemize}
-
 \end{frame}
+
+
 
 \subsection{Desvantagens}
 \begin{frame}{Desvantagens}
