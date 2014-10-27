@@ -491,16 +491,38 @@ printf("Soma: %d\n",sum.get_value());
 \end{frame}
 }
 \begin{frame}[fragile]{Notações Matriciais}
-\framesubtitle{Notação matricial como parâmetro de funções}
-   Esta e uma forma fácil de operar sobre cada elementode um vetor de forma
-   individual. Se resume a passar o vetor com o intervalo, como parâmetro da função
-   e o proprio cilk irá chamar a função (de forma paralela?), para cada elemento.
-\begin{scriptsize}
-\begin{block}{lalalalalala} 
-    int a[100];        \\
-    a = input[0:100];\\
-   processa(a[:]) ;  // void processa(int);\\
+\framesubtitle{Chamadas de função}
+   A chamada de uma função utilizando uma expressão de seção mapeia chamadas com os elementos sucessivos da mesma.
+
+\begin{block}{Função Escalar}
+\begin{lstlisting}
+void funcaoEscalarQualquer(int i) {
+    printf ("%3d", i);
+}
+\end{lstlisting}
 \end{block}
+\pause
+\begin{scriptsize}
+\begin{columns}
+\begin{column}{0.4\textwidth}
+\begin{block}{Versão escalar} 
+\begin{lstlisting}
+for(int i = 0; i < n; i++){
+    funcaoEscalarQualquer(a[i]);
+}
+\end{lstlisting}
+\end{block}
+\pause
+\end{column}
+\begin{column}{0.55\textwidth}
+\begin{block}{Versão escalar com notação matricial} 
+\begin{lstlisting}
+    funcaoEscalarQualquer(a[:]);
+\end{lstlisting}
+\end{block}
+\end{column}
+
+\end{columns}
 \end{scriptsize}
 \end{frame}
 
