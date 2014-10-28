@@ -41,7 +41,8 @@
     breaklines=true,
     morekeywords={cilk\_for, cilk\_spawn, cilk\_sync, cilk, grainsize, 
     reducer\_opadd, CILK\_C\_REDUCER\_OPADD, CILK\_C\_REGISTER\_REDUCER,
-    REDUCER\_VIEW, CILK\_C\_UNREGISTER\_REDUCER,get\_value}
+    REDUCER\_VIEW, CILK\_C\_UNREGISTER\_REDUCER,get\_value,
+    \_\_attribute\_\_, vector, \_Cilk\_for}
 }
 
 \begin{document}
@@ -576,7 +577,7 @@ for(int i = 0; i < n; i++){
 
 \subsubsection{Funções Elementares}
 \begin{frame}{Funções Elementares}
-    Funções Elementares são construções com funcionamento paralelos de dados.
+    Funções Elementares são construções que podem ser invocadas tanto em argumentos escalares quanto em elementos de uma matriz em paralelo.
     Ocorre em três etapas:
 \begin{enumerate}
     \item É escrito uma função que utiliza valores escalares de uma operação para um único elemento.
@@ -592,14 +593,61 @@ for(int i = 0; i < n; i++){
 \begin{block}{Semântica}
     Sua ordem de execução é fora da ordem da sua sequência de invocação, 
 \end{block}
-\begin{enumerate}
-    \item É escrito uma função que utiliza valores escalares de uma operação para um único elemento.
-\pause
-    \item Adiciona-se um atributo ao vetor para que o compilador gere uma variante vetorizada da função.
-\pause
-    \item Chama-se a função que irá operar em vários valores de uma só vez.
-\end{enumerate}
+\begin{block}{Atributo \textit{vector}}
+    De uso geral para que o compilador gere a versão vetorial da função.
+\end{block}
+\begin{block}{Cláusula \textit{processor}}
+    Direciona a versão vetorizada que o compilador irá criar para um arquitetura específica.
+\end{block}
+\begin{block}{Cláusula \textit{vectorlength}}
+    ( EXPLIQUEM ESSA PRA MIM, PLS!!!)
+\end{block}
+\end{frame}
+\begin{frame}{Funções Elementares}
+\begin{block}{Cláusula \textit{uniform}}
+    Argumentos que podem ser distribuídos para todas a iterações.
+\end{block}
+\begin{block}{Cláusula \textit{linear}}
+    Invocações consecutivas seguem padrões nos parâmetros.
+\end{block}
+\begin{block}{Cláusula \textit{mask}}
+    O compilador gera uma máscara no vetor da execução.
+\end{block}
+\end{frame}
 
+\begin{frame}[fragile]{Funções Elementares}
+\framesubtitle{Exemplo}
+\begin{scriptsize}
+\begin{block}{Exemplo}
+\begin{block}{Função Elementar}
+\begin{lstlisting}
+__attribute__((vector)) double ef_add (double x, double y){
+  return x + y;
+}
+\end{lstlisting}
+\end{block}
+\begin{columns}
+\begin{column}{0.4\textwidth}
+\begin{block}{Notação Matricial}
+\begin{lstlisting}
+a[:] = ef_add(b[:],c[:]);
+\end{lstlisting}
+\end{block}
+
+\end{column}
+\begin{column}{0.4\textwidth}
+\begin{block}{Construção Cilk}
+\begin{lstlisting}
+_Cilk_for (j = 0; j < n; ++j) {
+  a[j] = ef_add(b[j],c[j])
+}
+\end{lstlisting}
+\end{block}
+\end{column}
+\end{columns}
+
+\end{block}
+\end{scriptsize}
 \end{frame}
 
 %ESSE TÓPICO DEVERIA FICAR APÓS TODAS AS EXPLICAÇÕES E ANTES DOS EXEMPLOS - O QUE ACHAM???
@@ -643,7 +691,6 @@ for(int i = 0; i < n; i++){
     quase nada.
 \end{itemize}
 \end{frame}
-
 
 
 \subsection{Desvantagens}
