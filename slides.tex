@@ -650,6 +650,89 @@ _Cilk_for (j = 0; j < n; ++j) {
 \end{scriptsize}
 \end{frame}
 
+\subsection{Single Instruction Multiple Data}
+
+\begin{frame}[fragile]{\textit{SIMD}}
+\begin{itemize}
+     \item O Cilk Plus possui suporte para SIMD de forma fácil.
+     \item Possibilidade de vetorizar uma função e dizer ao compilador que um segmento deve ser vetorizado
+     \item Usando simplesmente 2 diretivas:
+\begin{lstlisting}
+__declspec (vector)
+#pragma simd [attr]
+\end{lstlisting}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{\_\_declspec (vector)}
+Considerando uma função de multiplicação de a e b
+\begin{block}{}
+    float sum(float a,float b)\{ \\
+	return a * b; \\
+\}
+\end{block}
+Para que a soma seja aplicada a um vetor é necessário um for para percorrer todos o elementos
+\begin{block}{}
+    for (int i=0;i<SIZE;i++)\{ \\
+	c[i] = sum(a[i],b[i]); \\
+   \}
+\end{block}
+\end{frame}
+\begin{frame}[fragile]{\_\_declspec (vector)}
+Da mesma forma e possivel vetorizar essa ou outra funco usando \_\_declspec (vector) 
+\begin{block}{}
+     \_\_declspec (vector) float sum(float a,float b) \{ \\
+	return a * b;\\
+\} \\
+/* etc */ \\
+c[:] = sum(a[:],b[:]);
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{\#pragma simd}}
+\begin{itemize}
+	\item O \#pragma simd diz ao compilador que o proximo blocco a ser executado deve ser vetorizado
+	\item Cabe ao compilador decidir de há dependencia de dados	
+\end{itemize}
+\begin{block}{}
+\begin{lstlisting}
+#pragma simd
+for (int i = 0; i < SIZE; i++) { 
+    c[i] = a[i] + b[i]; 
+}
+\end{lstlisting}
+\end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]{\texttt{Atributos}}
+ Existem atributos que podem ser usados tanto no \_\_declspec (vector) quanto no pragma \\
+São usados seguindo a sintaxe exemplo\\
+\#pragma simd reduction(+:sum)
+\begin{itemize}
+	\item \texttt{vectorlength(n1[, n2]...)}  \\
+		 Deve ser multiplo de 2. Define quantas iterações serão usada para cada parametro
+	\item \texttt{vectorlengthfor(data type)} \\
+		O parametro deve ser padrão (int,float, double) \\
+		Resume-se a VEC\_SIZE/sizeof(data\_type) sendo o resultado\\
+		aplicado como efeito do vectorlenght
+	\item \texttt{private(var1[, var2]...)} \\
+		Define as variaveis como privadas em cada ciclo
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{Atributos}}
+\begin{itemize}
+	\item firstprivate(var1[, var2]...)
+	\item firstprivate(var1[, var2]...)
+	\item linear(var1:step1 [,var2:step2]...)
+	\item reduction(oper:var1 [,var2]…)
+\end{itemize}
+\end{frame}
+
+
 %ESSE TÓPICO DEVERIA FICAR APÓS TODAS AS EXPLICAÇÕES E ANTES DOS EXEMPLOS - O QUE ACHAM???
 \subsection{Serial Elision}
 \begin{frame}[fragile]{\textit{Serial Elision}}
