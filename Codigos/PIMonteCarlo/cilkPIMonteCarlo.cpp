@@ -4,14 +4,12 @@
 #include<sys/time.h>
 #include<cilk/cilk.h>
 #include<cilk/reducer_opadd.h>
-//#include<cilk/cilk_api.h>
+#include<cilk/cilk_api.h>
 
 //#define cilk_spawn
 //#define cilk_sync
 //#define cilk_for for
-//NÃO ESTÁ GERANDO O MESMO RESULTADO NESSA DESGRAÇA
-//E O CILK É UM MILHÃO DE VEZES PIOR - CONSERTAR OU IMPLEMENTAR OUTRO!!!
-//Dfine uma seed.
+
 int main(int argc, char** argv){
 	double x;
 	double y;
@@ -35,11 +33,12 @@ int main(int argc, char** argv){
 	numThreads = strtol(argv[1],NULL,10);
 	pontos = strtol(argv[2],NULL,10);
 
-//	__cilkrts_set_param("nworkers", "20");
+    __cilkrts_end_cilk();  
+	__cilkrts_set_param("nworkers", argv[1]);
 
 	gettimeofday(&ini,NULL);
 
-	cilk_for(i=0; i<pontos; i++){
+	cilk_for(int i=0; i<pontos; i++){
                 x = rand_r(&id)/(double)RAND_MAX;
                 y = rand_r(&id)/(double)RAND_MAX;
 		if(x*x + y*y <= 1){
