@@ -266,6 +266,24 @@ cilk_sync;
 \end{columns}
 \end{frame}
 
+\subsection{Serial Elision}
+\begin{frame}[fragile]{\textit{Serial Elision}}
+\begin{itemize}
+    \item O Cilk Plus, de uma forma geral, é uma linguagem pouco intrusiva;
+    \item Isso fica explícito quando se deseja, por exemplo, obter a versão
+    serial (\textit{serial elision}) de um programa Cilk Plus: basta eliminar as
+    palavras-chave \texttt{cilk\_spawn}, \texttt{cilk\_sync} e
+    \texttt{cilk\_for};
+    \item De forma trivial:
+\begin{lstlisting}
+#define cilk_spawn
+#define cilk_sync
+#define cilk_for for
+\end{lstlisting}
+    \item O resultado é um programa serial C/C++ válido.
+\end{itemize}
+\end{frame}
+
 \subsection{Hiperobjetos}
 \begin{frame}[fragile]{Hiperobjetos}
     Hiperojetos possibilitam acesso \textit{thread-safe} a objetos compartilhados, dando a cada \textit{thread} uma instância do objeto.
@@ -736,26 +754,6 @@ São usados seguindo a sintaxe exemplo\\
 		var1 =+ step1; var2 += step2 ...
 	\item reduction(oper:var1 [,var2]…)
 		Faz uma redução tendo um operando e uma ou mais váriaveis.
-\end{itemize}
-\end{frame}
-
-
-%ESSE TÓPICO DEVERIA FICAR APÓS TODAS AS EXPLICAÇÕES E ANTES DOS EXEMPLOS - O QUE ACHAM???
-\subsection{Serial Elision}
-\begin{frame}[fragile]{\textit{Serial Elision}}
-\begin{itemize}
-    \item O Cilk Plus, de uma forma geral, é uma linguagem pouco intrusiva;
-    \item Isso fica explícito quando se deseja, por exemplo, obter a versão
-    serial (\textit{serial elision}) de um programa Cilk Plus: basta eliminar as
-    palavras-chave \texttt{cilk\_spawn}, \texttt{cilk\_sync} e
-    \texttt{cilk\_for};
-    \item De forma trivial:
-\begin{lstlisting}
-#define cilk_spawn
-#define cilk_sync
-#define cilk_for for
-\end{lstlisting}
-    \item O resultado é um programa serial C/C++ válido.
 \end{itemize}
 \end{frame}
 
