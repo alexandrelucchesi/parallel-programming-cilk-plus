@@ -33,7 +33,7 @@ int main(int argc, char** argv){
 	numThreads = strtol(argv[1],NULL,10);
 	pontos = strtol(argv[2],NULL,10);
 
-    __cilkrts_end_cilk();  
+        __cilkrts_end_cilk();  
 	__cilkrts_set_param("nworkers", argv[1]);
 
 	gettimeofday(&ini,NULL);
@@ -47,7 +47,7 @@ int main(int argc, char** argv){
 	}
         gettimeofday(&fim,NULL);
         duracao = (long long unsigned)((fim.tv_sec*1000000 + fim.tv_usec)-(ini.tv_sec*1000000 + ini.tv_usec));
-	printf("%f\n",(double)4*cont.get_value()/(double)pontos);
+//	printf("%f\n",(double)4*cont.get_value()/(double)pontos);
 	printf("%lld\n",duracao);
 
 	return(0);

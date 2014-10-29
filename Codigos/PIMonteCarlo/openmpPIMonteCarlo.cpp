@@ -37,7 +37,7 @@ int main(int argc, char** argv){
 }
         gettimeofday(&fim,NULL);
         duracao = (long long unsigned)((fim.tv_sec*1000000 + fim.tv_usec)-(ini.tv_sec*1000000 + ini.tv_usec));
-        printf("%f\n",(double)4*cont/(double)pontos);
+//        printf("%f\n",(double)4*cont/(double)pontos);
         printf("%lld\n",duracao);
         return(0);
 }
