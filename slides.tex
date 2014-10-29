@@ -725,10 +725,17 @@ São usados seguindo a sintaxe exemplo\\
 
 \begin{frame}[fragile]{\texttt{Atributos}}
 \begin{itemize}
-	\item firstprivate(var1[, var2]...)
-	\item firstprivate(var1[, var2]...)
+	\item firstprivate(var1[, var2]...) \\
+		Funciona como o private, mas o valor inicial da variavel é atribuido a todas as iterações
+		paralelas.
+	\item lastprivate(var1[, var2]...)
+		Funciona como o private, mas o valor da utima iteração é atribuido a variavel após
+		a execução.
 	\item linear(var1:step1 [,var2:step2]...)
+		A cada iteração var1 é incrementada em step.
+		var1 =+ step1; var2 += step2 ...
 	\item reduction(oper:var1 [,var2]…)
+		Faz uma redução tendo um operando e uma ou mais váriaveis.
 \end{itemize}
 \end{frame}
 
