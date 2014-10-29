@@ -756,14 +756,30 @@ São usados seguindo a sintaxe exemplo\\
 		Faz uma redução tendo um operando e uma ou mais váriaveis.
 \end{itemize}
 \end{frame}
-
-\subsection{Exemplos}
-\begin{frame}{Exemplos}
-\end{frame}
-
-\begin{frame}{Análise Comparativa}
 \section{Análise Comparativa}
-\subsection{Gráfico de \protect\textit{Speedup}}
+\begin{frame}{Análise Comparativa}
+    Para realizar uma análise de performance do Cilk Plus, foram escolhidos 
+    dois problemas triviais e comparados sua execução com o \textit{OpenMP}:
+\newline
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\centering
+Multiplicação por Escalar
+\begin{figure}
+	\includegraphics[scale=0.5]{./img/escalar}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\centering
+Pi de MonteCarlo
+\begin{figure}
+	\includegraphics[scale=0.15]{./img/pi}
+\end{figure}
+\end{column}
+
+
+\end{columns}
+
 \end{frame}
 
 \section{Aspectos da Ferramenta}
