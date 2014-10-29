@@ -14,6 +14,9 @@
 %\usepackage{courier}
 \usepackage[scaled=0.8]{beramono}
 
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+
 %Box color
 %\setbeamercolor{block title example}{fg=blue!50,bg=blue!10}
 %\setbeamercolor{block body example}{fg=blue,bg=blue!5}
@@ -794,6 +797,14 @@ Pi de MonteCarlo
 \end{column}
 \begin{column}{0.6\textwidth}
 GRÁFICO DE TEMPOS
+
+
+\end{column}
+\end{columns}
+\end{frame}
+
+
+%\begin{frame}
 %\begin{center}
 %\begin{tikzpicture}[scale=1]
 %\begin{groupplot}[
@@ -813,17 +824,33 @@ GRÁFICO DE TEMPOS
 %%    x post scale=3
 %]
 %\nextgroupplot
-%\addplot table[x=taxa, y=eficiencia]{dados/escalabilidadeFraca.dat};
-%\addlegendentry{Escalabilidade Fraca}
+%\addplot table[x=proc, y=openmp]{escalar-tempos/tempos.dat};
+%\addlegendentry{Tempos de Execução}
 %\end{groupplot}
 %\end{tikzpicture}
 %\end{center}
+%\end{frame}
 
-\end{column}
-\end{columns}
+\begin{frame}{}
+
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  title=Tempos de Execução,
+  grid=both,
+  ylabel={Tempo(microssegundos)},
+  xlabel={\textit{Threads} ou \textit{Workers}},
+  xtick=data
+]
+\addplot table[x=proc,y=openmp]{escalar/tempos.dat};
+\addplot table[x=proc,y=cilk]{escalar/tempos.dat};
+\legend{OpenMP}
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+
 \end{frame}
-
-
 
 
 
@@ -840,6 +867,7 @@ GRÁFICO DE TEMPOS
     quase nada.
 \end{itemize}
 \end{frame}
+
 
 
 \subsection{Desvantagens}
