@@ -158,7 +158,7 @@ cilk_for(idx = expr; cond; incr)
 
 \begin{frame}[fragile]{\texttt{cilk\_for}}
 \begin{itemize}
-    \item Como forma de evitar sincronizações execivas, e por padrão, o 
+    \item Como forma de evitar sincronizações excessivas o 
     \texttt{cilk\_for} divide (\textit{tiles}) o espaço de iterações, fazendo 
     com que cada \textit{thread} execute um \textit{tile}.
     \item Para casos onde é necessário maior controle da granularidade,
@@ -174,7 +174,7 @@ cilk_for (int i = 0; i < n; i++)
 \end{frame}
 {
 \usebackgroundtemplate{%
-\tikz[overlay,remember picture] \node[opacity=0.025, at=(current page.center)] {
+\tikz[overlay,remember picture] \node[opacity=0.1, at=(current page.center)] {
    \includegraphics[height=\paperheight,width=\paperwidth]{img/spawn.jpg}};
 }
 \subsubsection{cilk\_spawn}
@@ -205,10 +205,11 @@ cilk_spawn [&]{
     \item O \texttt{cilk\_sync} consiste em um mecanismo de sincronização que se
     assemelha a um \textit{join}.
     \item O escopo de uma chamada \texttt{cilk\_sync} é a função inteira na qual
-    foi declarada e existe uma chamada \texttt{cilk\_sync} implícita no final de
-    cada função.
+    foi declarada;
+    \item Além disso, existe uma chamada \texttt{cilk\_sync} implícita no final de
+    cada função;
     \item Isso implica que todo o paralelismo criado com o Cilk Plus em
-    determinada função, termina antes que ela retorne.
+    determinada função termina antes que ela retorne.
 \end{itemize}
 \end{frame}
 
@@ -292,19 +293,19 @@ cilk_sync;
 \begin{columns}[T]
 \begin{column}{0.5\textwidth}
 \begin{itemize}
-    \item São em sua maioria redutores e fornecem uma operação que mecla dois \textit{views} para o redutor. 
+    \item São em sua maioria redutores e fornecem uma operação que mescla duas \textit{views} para o redutor. 
 \end{itemize}
 \begin{footnotesize}
 \begin{block}{}
 \begin{lstlisting}
-    cilk::reducer_opadd<float> sum = 0;
-    ...
-    cilk_for(size_t i = 1; i < n; i++){
+cilk::reducer_opadd<float> sum = 0;
+...
+cilk_for(size_t i = 1; i < n; i++) {
 // Atualiza a soma local.
-        sum += f(i);
-    }
+    sum += f(i);
+}
 // get_value() retorna a soma global.
-    result = sum.get_value(); 
+result = sum.get_value(); 
 \end{lstlisting}
 \end{block}
 \end{footnotesize}
@@ -315,19 +316,19 @@ cilk_sync;
 \begin{footnotesize}
 \begin{block}{Redutores}
 Lists \\
-\qquad list\_append \\
+\qquad \texttt{list\_append} \\
 Listas \\
-\qquad list\_append, list\_prepend \\
+\qquad \texttt{list\_append}, \texttt{list\_prepend} \\
 Mínimo e Máximo \\
-\qquad max, max\_index, min, min\_index \\
+\qquad \texttt{max}, \texttt{max\_index}, \texttt{min}, \texttt{min\_index} \\
 Operadores Matemáticos \\
-\qquad add, mul \\
+\qquad \texttt{add}, \texttt{mul} \\
 Operadores bit-a-bit \\
-\qquad and, or, xor \\
+\qquad \texttt{and}, \texttt{or}, \texttt{xor} \\
 Concatenação de strings \\
-\qquad string, wstring \\
+\qquad \texttt{string}, \texttt{wstring} \\
 Arquivos \\
-\qquad ostream
+\qquad \texttt{ostream}
 \end{block}
 \end{footnotesize}
 
@@ -339,14 +340,14 @@ Arquivos \\
 \begin{frame}[fragile]{Hiperobjetos}
     Tais operações possibilitam a utilização de regiões compartilhadas sem o uso de \textit{locks}, com as seguintes características:
 \begin{itemize}
-	\item Funciona para qualquer operação de redução associativa.
-    \item As operações não precisam ser comutativas.
-    \item O redutor não necessita ser uma variável local.
+	\item Funciona para qualquer operação de redução associativa;
+    \item As operações não precisam ser comutativas;
+    \item O redutor não precisa ser uma variável local.
 \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Hiperobjetos}
-    Hiperobjetos possuem diferentes sintaxes e comportamentos em C e C++.
+    Hiperobjetos possuem diferentes sintaxes em C e C++.
 \begin{columns}[T]
 \begin{column}{0.4\textwidth}
 \begin{tiny}
@@ -387,9 +388,8 @@ printf("Soma: %d\n",sum.get_value());
 \begin{frame}{Notações Matriciais e Funções Elementares}
 \begin{block}{}
 \centering
-    O Cilk Plus estende o C/C++ para utilizar Notações Matriciais e Funções 
-    Elementares, o qual permite ao programador especificar seções de uma matriz 
-    da qual será realizado o acesso. Tal notação auxilia o compilador na 
+    O Cilk Plus estende o C/C++ para utilizar \textbf{notações matriciais} e \textbf{funções 
+    elementares}, as quais auxiliam o compilador na 
     realização de vetorização e autoparalelização.
 \end{block}
 \end{frame}
@@ -399,7 +399,7 @@ printf("Soma: %d\n",sum.get_value());
 \begin{block}{Expressões de Seção}
     Forma de selecionar múltiplos \textit{arrays} de elementos para operações de dados paralela.
 \begin{block}{Sintaxe}
-    \texttt{[Início:tamanho:passo]}
+    \texttt{[início:tamanho:passo]}
 \end{block}
     A respectiva tripla representa uma sequência de valores subscritos a partir 
     do \textbf{início}, com $n$ elementos de \textbf{tamanho}, onde cada um 
@@ -416,12 +416,12 @@ printf("Soma: %d\n",sum.get_value());
 
 \begin{frame}{Notações Matriciais}
 \begin{block}{Expressões de Seção}
-    Expressões de Seção seguem as seguintes regras:
+    Expressões de seção seguem as seguintes regras:
 \begin{itemize}
-    \item Se não há passo, o valor do mesmo é 1.
+    \item Se não há passo, o valor do mesmo é 1;
 	\item Se a tripla não contém expressões, o valor de início é $0$ e o 
-	valor de tamanho é o número de elementos contidos no \textit{array}.
-	\item Se o passo é negativo, o valor de início apontara para o índice mais alto.
+	valor de tamanho é o número de elementos contidos no \textit{array};
+	\item Se o passo é negativo, o valor de início apontara para o índice mais alto;
 	\item Se o tamanho $\leq 0$, a sequência é vazia.
 \end{itemize}
 \end{block}
@@ -430,10 +430,10 @@ printf("Soma: %d\n",sum.get_value());
 
 \begin{frame}[fragile]{Notações Matriciais}
 \framesubtitle{Expressões de Seção}
-    Cada Expressão de Seção possui um rank que ditam as regras de operações que
+    Cada \textbf{expressão de seção} possui um \textit{rank} que ditam as regras de operações que
     podem ser realizadas com aquele \textit{array}.~\footnote{São diversas as
-    regras a respeitos de Expressões de Seção e foge ao escopo do Seminário,
-    que é uma apresentação superficial sobre a ferramenta, explorá-las}
+    regras a respeitos de expressões de seção e foge ao escopo do Seminário,
+    que é uma apresentação superficial sobre a ferramenta, explorá-las.}
 \begin{scriptsize}
 \begin{block}{Exemplos de Expressões de Seção}
 \begin{verbatim}
@@ -565,7 +565,7 @@ for(int i = 0; i < n; i++){
 \begin{frame}[fragile]{Notações Matriciais}
 \framesubtitle{Operações de Redução}
 	Operações de redução em Notações Matriciais funcionam de forma similar
-	aquelas existentes nas hiperoperações, sendo executadas para a seção
+	àquelas existentes nas hiperoperações, sendo executadas para a seção
 	estipulada do \textit{array}.
 \begin{block}{Lista de Operações de Redução}
 \begin{small}
@@ -573,20 +573,20 @@ for(int i = 0; i < n; i++){
 \begin{columns}
 \begin{column}{0.45\textwidth}
 \begin{itemize}
-    \item \_\_sec\_reduce\_add
-    \item \_\_sec\_reduce\_mul
-    \item \_\_sec\_reduce\_max
-    \item \_\_sec\_reduce\_min
-    \item \_\_sec\_reduce\_max\_ind
+    \item \texttt{\_\_sec\_reduce\_add}
+    \item \texttt{\_\_sec\_reduce\_mul}
+    \item \texttt{\_\_sec\_reduce\_max}
+    \item \texttt{\_\_sec\_reduce\_min}
+    \item \texttt{\_\_sec\_reduce\_max\_ind}
 \end{itemize}
 \end{column}
 \begin{column}{0.45\textwidth}
 \begin{itemize}
-    \item \_\_sec\_reduce\_min\_ind
-    \item \_\_sec\_reduce\_all\_zero
-    \item \_\_sec\_reduce\_all\_nonzero
-    \item \_\_sec\_reduce\_any\_zero
-    \item \_\_sec\_reduce\_any\_nonzero
+    \item \texttt{\_\_sec\_reduce\_min\_ind}
+    \item \texttt{\_\_sec\_reduce\_all\_zero}
+    \item \texttt{\_\_sec\_reduce\_all\_nonzero}
+    \item \texttt{\_\_sec\_reduce\_any\_zero}
+    \item \texttt{\_\_sec\_reduce\_any\_nonzero}
 \end{itemize}
 \end{column}
 \end{columns}
@@ -600,18 +600,18 @@ for(int i = 0; i < n; i++){
     Funções Elementares são construções que podem ser invocadas tanto em argumentos escalares quanto em elementos de uma matriz em paralelo.
     Ocorre em três etapas:
 \begin{enumerate}
-    \item É escrito uma função que utiliza valores escalares de uma operação para um único elemento.
+    \item É escrito uma função que utiliza valores escalares de uma operação para um único elemento;
 \pause
-    \item Adiciona-se um atributo ao vetor para que o compilador gere uma variante vetorizada da função.
+    \item Adiciona-se um atributo ao vetor para que o compilador gere uma variante vetorizada da função;
 \pause
-    \item Chama-se a função que irá operar em vários valores de uma só vez.
+    \item Chama-se a função que irá operar com vários valores de uma só vez.
 \end{enumerate}
 
 \end{frame}
 
 \begin{frame}{Funções Elementares}
 \begin{block}{Semântica}
-    Sua ordem de execução é fora da ordem da sua sequência de invocação, 
+    Sua ordem de execução é fora da ordem da sua sequência de invocação.
 \end{block}
 \begin{block}{Atributo \textit{vector}}
     De uso geral para que o compilador gere a versão vetorial da função.
@@ -625,7 +625,7 @@ for(int i = 0; i < n; i++){
 \end{frame}
 \begin{frame}{Funções Elementares}
 \begin{block}{Cláusula \textit{uniform}}
-    Argumentos que podem ser distribuídos para todas a iterações.
+    Argumentos podem ser distribuídos para todas as iterações.
 \end{block}
 \begin{block}{Cláusula \textit{linear}}
     Invocações consecutivas seguem padrões nos parâmetros.
@@ -641,8 +641,8 @@ for(int i = 0; i < n; i++){
 \begin{block}{Exemplo}
 \begin{block}{Função Elementar}
 \begin{lstlisting}
-__attribute__((vector)) double ef_add (double x, double y){
-  return x + y;
+__attribute__((vector)) double ef_add(double x, double y) {
+    return x + y;
 }
 \end{lstlisting}
 \end{block}
@@ -650,7 +650,7 @@ __attribute__((vector)) double ef_add (double x, double y){
 \begin{column}{0.4\textwidth}
 \begin{block}{Notação Matricial}
 \begin{lstlisting}
-a[:] = ef_add(b[:],c[:]);
+a[:] = ef_add(b[:], c[:]);
 \end{lstlisting}
 \end{block}
 
@@ -659,7 +659,7 @@ a[:] = ef_add(b[:],c[:]);
 \begin{block}{Construção Cilk}
 \begin{lstlisting}
 _Cilk_for (j = 0; j < n; ++j) {
-  a[j] = ef_add(b[j],c[j])
+  a[j] = ef_add(b[j], c[j])
 }
 \end{lstlisting}
 \end{block}
@@ -788,7 +788,7 @@ Pi de MonteCarlo
 \begin{frame}{Multiplicação Escalar}
     Dados de execução:
 \begin{columns}
-\begin{column}{0.4\textwidth}
+\begin{column}{0.5\textwidth}
 \footnotesize
 \begin{enumerate}
 	\item Tipo da matriz: Inteiros
@@ -797,47 +797,10 @@ Pi de MonteCarlo
     \item Variação nas \textit{threads}
 \end{enumerate}
 \end{column}
-\begin{column}{0.6\textwidth}
-GRÁFICO DE TEMPOS
-
-
-\end{column}
-\end{columns}
-\end{frame}
-
-
-%\begin{frame}
-%\begin{center}
-%\begin{tikzpicture}[scale=1]
-%\begin{groupplot}[
-%    group style={group size=1 by 1,	horizontal sep=1.7cm,}, 			ylabel={Eficiência},
-%	xlabel={Taxa},
-%%   xmin = 0, xmax = 30,
-%    xtick=data,
-%    scaled x ticks = false, x tick label style={/pgf/number format/fixed},
-%    minor ytick=data,
-%    scale only axis,
-%    log ticks with fixed point,
-%    grid=both,
-%    footnotesize,
-%%    legend columns=5,
-%    legend style={at={(0.5,1.18)},anchor=north},
-%    cycle list name ={my chart colors},
-%%    x post scale=3
-%]
-%\nextgroupplot
-%\addplot table[x=proc, y=openmp]{escalar-tempos/tempos.dat};
-%\addlegendentry{Tempos de Execução}
-%\end{groupplot}
-%\end{tikzpicture}
-%\end{center}
-%\end{frame}
-
-\begin{frame}{}
-
+\begin{column}{0.5\textwidth}
 \begin{figure}
 \centering
-\begin{tikzpicture}
+\begin{tikzpicture}[scale=0.7]
 \begin{axis}[
   title=Tempos de Execução,
   grid=both,
@@ -847,46 +810,49 @@ GRÁFICO DE TEMPOS
 ]
 \addplot table[x=proc,y=openmp]{escalar/tempos.dat};
 \addplot table[x=proc,y=cilk]{escalar/tempos.dat};
-\legend{OpenMP}
+\legend{OpenMP, Cilk Plus}
 \end{axis}
 \end{tikzpicture}
 \end{figure}
 
+
+\end{column}
+\end{columns}
 \end{frame}
-
-
 
 \section{Aspectos da Ferramenta}
 \subsection{Vantagens}
 \begin{frame}{Vantagens}
 \begin{itemize}
+	\item Documentação abrangente;
     \item Diretivas básicas bem definidas e de uso trivial;
-    \item \textit{Syntactic sugar} para manipulação de \textit{arrays};
-    \item Focada em otimizar resultados em processadores da
-    Intel\textsuperscript{\textregistered};
-    \item Implementa SIMD;
+    \item \textit{Syntactic sugar} para manipulação de \textit{arrays} (notação matricial);
+    \item Focada em otimizações para arquitetura Intel;
+    \item É uma extensão de linguagem pouco intrusiva;
+    \item Suporte SIMD.
 \end{itemize}
 \end{frame}
 
 \subsection{Desvantagens}
 \begin{frame}{Desvantagens}
 \begin{itemize}
-    \item Dificuldade de se instalar;
+    \item Dependente de plataforma (somente para Intel);
 % Esse ítem aqui acho que tá errado, já que ela usa Serial Elision e funciona de forma similar ao OPENMP
 %    \item Muito invasiva, necessita de modificações no compilador e faz alterações na própria sintaxe.
-    \item Manipulação de recursos (ex.: \textit{workers}) não é nativa da
-    ferramenta.
+	\item A decisão do número de \textit{threads} (\textit{workers}) é, por padrão, atribuição do compilador;
 % COMENTAR, MAS NÃO ESCREVER ISSO EXPLICITAMENTE - São necessárias verdadeiras gambiarras para modificar, por exemplo, o número de threads.
-    \item Complicado de se otimizar.
+	\item Não provê suporte para que o programador atue sobre a política de escalonamento;
 \end{itemize}
 
 \end{frame}
 
-\begin{frame}
-teste de bibliografia\cite{doge}
+\section{Conclusão}
+\begin{frame}[plain]
+\begin{center}
+\huge \textbf{CONCLUSÃO...}
+\end{center}
 \end{frame}
 
-\section{Conclusão}
 \begin{frame}%[allowframebreaks]
     \frametitle{Referências Bibliográficas}
     \tiny{\bibliographystyle{abbrv}}
