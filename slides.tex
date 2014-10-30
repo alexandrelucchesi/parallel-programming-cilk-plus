@@ -13,6 +13,7 @@
 \usepackage{listings}
 %\usepackage{courier}
 \usepackage[scaled=0.8]{beramono}
+\usepackage{multicol}
 
 \usepackage{pgfplots}
 \usepgfplotslibrary{groupplots}
@@ -54,8 +55,12 @@
     \titlepage%
 \end{frame}
 
-\begin{frame}[shrink]{Sumário}
-    \tableofcontents
+\begin{frame}{Sumário}
+%\begin{multicols}{2}
+\begin{footnotesize}
+\tableofcontents
+\end{footnotesize}
+%\end{multicols}
 \end{frame}
 
 %\section{Introdução}
@@ -107,7 +112,8 @@
         \item \texttt{cilk\_sync}.
     \end{itemize}
     \item Redução com hiperobjetos;
-    \item Notação matricial.
+    \item Notação matricial;
+    \item \texttt{-fcilkplus}.
 \end{itemize}
 \end{frame}
 \subsubsection{cilk\_for}
@@ -129,12 +135,13 @@ void saxpy(float a, float x[], float y[], size_t n) {
 \begin{columns}[T]
 \begin{column}{0.5\textwidth}
 \begin{itemize}
-    \item A sintaxe do \texttt{cilk\_for} tem algumas limitações, pois deve ser
-    possível computar o espaço de iterações antes de executar o \textit{loop};
-    \item O \texttt{corpo} deve ser paralelizável;
-    \item O tipo de \texttt{idx} deve ser um inteiro ou \textit{iterator} de
+    \item<+-> A sintaxe do \texttt{cilk\_for} tem \textbf{algumas limitações},
+    pois deve ser possível computar o espaço de iterações antes de executar o
+    \textit{loop};
+    \item<+-> O \texttt{corpo} deve ser paralelizável;
+    \item<+-> O tipo de \texttt{idx} deve ser um inteiro ou \textit{iterator} de
     acesso randômico (ex: um ponteiro);
-    \item Em \texttt{cond} podem ser utilizados somente: ${ !=, <, >, >=, <= }$;
+    \item<+-> Em \texttt{cond} podem ser utilizados somente: ${ !=, <, >, >=, <= }$;
 \end{itemize}
 \end{column}
 
@@ -146,9 +153,9 @@ cilk_for(idx = expr; cond; incr)
 \end{lstlisting}
 \end{block}
 \begin{itemize}
-    \item \texttt{cond} e \texttt{incr} são usados com \texttt{idx} e possuem um
+    \item<+-> \texttt{cond} e \texttt{incr} são usados com \texttt{idx} e possuem um
     limite e um passo que devem ser avaliados apenas uma vez (imutáveis);
-    \item O incremento (ou decremento) pode ser expressado com ${ +=, -=, ++,
+    \item<+-> O incremento (ou decremento) pode ser expressado com ${ +=, -=, ++,
     --}$.
 \end{itemize}
 \end{column}
@@ -164,6 +171,7 @@ cilk_for(idx = expr; cond; incr)
     \item Para casos onde é necessário maior controle da granularidade,
     pode-se o utilizar o \textbf{\texttt{pragma cilk grainsize}} para
     especificar o tamanho de um \textit{tile}:
+\pause
 \begin{lstlisting}
 #pragma cilk grainsize = 1
 cilk_for (int i = 0; i < n; i++)
@@ -172,12 +180,13 @@ cilk_for (int i = 0; i < n; i++)
 \end{itemize}
 
 \end{frame}
+
+\subsubsection{cilk\_spawn}
 {
 \usebackgroundtemplate{%
 \tikz[overlay,remember picture] \node[opacity=0.1, at=(current page.center)] {
    \includegraphics[height=\paperheight,width=\paperwidth]{img/spawn.jpg}};
 }
-\subsubsection{cilk\_spawn}
 \begin{frame}[fragile]{\texttt{cilk\_spawn}}
 \begin{itemize}
     \item O \texttt{cilk\_spawn} cria e executa uma nova \textit{thread}
@@ -188,6 +197,7 @@ cilk_for (int i = 0; i < n; i++)
 \begin{lstlisting}
 x = cilk_spawn f(*p++);
 \end{lstlisting}
+\pause
     \item É possível criar chamadas assíncronas de um conjunto de instruções
     através de \textbf{expressões lambda}:
 \begin{lstlisting}
@@ -199,6 +209,7 @@ cilk_spawn [&]{
 \end{itemize}
 \end{frame}
 }
+
 \subsubsection{cilk\_sync}
 \begin{frame}{\texttt{cilk\_sync}}
 \begin{itemize}
@@ -277,6 +288,7 @@ cilk_sync;
     serial (\textit{serial elision}) de um programa Cilk Plus: basta eliminar as
     palavras-chave \texttt{cilk\_spawn}, \texttt{cilk\_sync} e
     \texttt{cilk\_for};
+\pause
     \item De forma trivial:
 \begin{lstlisting}
 #define cilk_spawn
