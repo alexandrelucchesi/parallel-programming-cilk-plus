@@ -807,7 +807,8 @@ Pi de MonteCarlo
   grid=both,
   ylabel={Tempo (segundos)},
   xlabel={\textit{Threads} ou \textit{Workers}},
-  xtick=data
+  xtick=data,
+  legend style={at={(0.5,-0.25)},anchor=north}
 ]
 \addplot table[x=proc,y=openmp]{escalar/tempos.dat};
 \addplot table[x=proc,y=cilk]{escalar/tempos.dat};
@@ -828,7 +829,8 @@ Pi de MonteCarlo
   grid=both,
   ylabel={Tempo (segundos)},
   xlabel={\textit{Threads} ou \textit{Workers}},
-  xtick=data
+  xtick=data,
+  legend style={at={(0.5,-0.25)},anchor=north}
 ]
 \addplot table[x=proc,y=openmp]{escalar/speedup.dat};
 \addplot table[x=proc,y=cilk]{escalar/speedup.dat};
@@ -849,7 +851,8 @@ Pi de MonteCarlo
   grid=both,
   ylabel={Tempo (segundos)},
   xlabel={\textit{Threads} ou \textit{Workers}},
-  xtick=data
+  xtick=data,
+  legend style={at={(0.5,-0.25)},anchor=north}
 ]
 \addplot table[x=proc,y=openmp]{escalar/eficiencia.dat};
 \addplot table[x=proc,y=cilk]{escalar/eficiencia.dat};
@@ -884,7 +887,8 @@ Pi de MonteCarlo
   grid=both,
   ylabel={Tempo (segundos)},
   xlabel={\textit{Threads} ou \textit{Workers}},
-  xtick=data
+  xtick=data,
+  legend style={at={(0.5,-0.25)},anchor=north}
 ]
 \addplot table[x=proc,y=openmp]{pi/tempos.dat};
 \addplot table[x=proc,y=cilk]{pi/tempos.dat};
@@ -905,7 +909,8 @@ Pi de MonteCarlo
   grid=both,
   ylabel={Tempo (segundos)},
   xlabel={\textit{Threads} ou \textit{Workers}},
-  xtick=data
+  xtick=data,
+  legend style={at={(0.5,-0.25)},anchor=north}
 ]
 \addplot table[x=proc,y=openmp]{pi/speedup.dat};
 \addplot table[x=proc,y=cilk]{pi/speedup.dat};
@@ -926,7 +931,8 @@ Pi de MonteCarlo
   grid=both,
   ylabel={Tempo (segundos)},
   xlabel={\textit{Threads} ou \textit{Workers}},
-  xtick=data
+  xtick=data,
+  legend style={at={(0.5,-0.25)},anchor=north}
 ]
 \addplot table[x=proc,y=openmp]{pi/eficiencia.dat};
 \addplot table[x=proc,y=cilk]{pi/eficiencia.dat};
