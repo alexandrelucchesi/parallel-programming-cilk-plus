@@ -641,8 +641,8 @@ for(int i = 0; i < n; i++){
 \begin{block}{Exemplo}
 \begin{block}{Função Elementar}
 \begin{lstlisting}
-__attribute__((vector)) double ef_add(double x, double y) {
-    return x + y;
+__attribute__((vector)) double aparar(double y, double y1) {
+    return y - y1;
 }
 \end{lstlisting}
 \end{block}
@@ -650,7 +650,7 @@ __attribute__((vector)) double ef_add(double x, double y) {
 \begin{column}{0.4\textwidth}
 \begin{block}{Notação Matricial}
 \begin{lstlisting}
-a[:] = ef_add(b[:], c[:]);
+a[:] = aparar(b[:], c[:]);
 \end{lstlisting}
 \end{block}
 
@@ -659,7 +659,7 @@ a[:] = ef_add(b[:], c[:]);
 \begin{block}{Construção Cilk}
 \begin{lstlisting}
 _Cilk_for (j = 0; j < n; ++j) {
-  a[j] = ef_add(b[j], c[j])
+  a[j] = aparar(b[j], c[j])
 }
 \end{lstlisting}
 \end{block}
@@ -670,8 +670,59 @@ _Cilk_for (j = 0; j < n; ++j) {
 \end{scriptsize}
 \end{frame}
 
-\subsection{Single Instruction Multiple Data}
+\begin{frame}{Exemplo de função elementar}
 
+\begin{columns}
+\only<1>{
+\begin{column}{1\textwidth}
+\begin{center}
+\begin{block}{\small Função \textbf{aparar}}
+\begin{figure}
+	\includegraphics[scale=0.4]{./img/parvec/serial1.png}
+\end{figure}
+\end{block}
+\end{center}
+\end{column}
+}
+\only<2>{
+\begin{column}{0.9\textwidth}
+\begin{center}
+\begin{block}{\small Função \textbf{aparar}}
+\begin{figure}
+	\includegraphics[scale=0.4]{./img/parvec/serial2.png}
+\end{figure}
+\end{block}
+\end{center}
+\end{column}
+}
+\only<3>{
+\begin{column}{0.8\textwidth}
+\begin{center}
+\begin{block}{\small Função \textbf{aparar}}
+\begin{figure}
+	\includegraphics[scale=0.4]{./img/parvec/serial3.png}
+\end{figure}
+\end{block}
+\end{center}
+\end{column}
+}
+\only<4>{
+\begin{column}{0.7\textwidth}
+\begin{center}
+\begin{block}{\small Função \textbf{aparar}}
+\begin{figure}
+	\includegraphics[scale=0.4]{./img/parvec/serial4.png}
+\end{figure}
+\end{block}
+\end{center}
+\end{column}
+}
+
+\end{columns}
+
+\end{frame}
+
+\subsection{Single Instruction Multiple Data}
 \begin{frame}[fragile]{SIMD}
 \begin{itemize}
      \item O Cilk Plus possui suporte para SIMD;
