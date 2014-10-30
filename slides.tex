@@ -45,7 +45,7 @@
     morekeywords={cilk\_for, cilk\_spawn, cilk\_sync, cilk, grainsize, 
     reducer\_opadd, CILK\_C\_REDUCER\_OPADD, CILK\_C\_REGISTER\_REDUCER,
     REDUCER\_VIEW, CILK\_C\_UNREGISTER\_REDUCER,get\_value,
-    \_\_attribute\_\_, vector, \_Cilk\_for}
+    \_\_attribute\_\_, vector, \_Cilk\_for, simd, \_\_declspec}
 }
 
 \begin{document}
@@ -85,9 +85,8 @@
 \begin{itemize}
     \item Cilk-1: suporte eficiente a \textbf{\textit{work-stealing}};
     \item Cilk-5: extensões simples para \textit{multithread} em ANSI C\@;
-    \item Cilk++: versão comercial para C++ que introduziu reduções de
-    hiperobjetos como técnica eficiente em aplicações cuja programação é
-    irregular (ex: simulações \textit{N-body}, \textit{tree search}, etc);
+    \item Cilk++: versão comercial para C++ que introduziu reduções com
+    hiperobjetos;
     \item Cilk Plus: adicionou extensões para matrizes e foi incorporado ao
     compilador da Intel~\footnote{Pouco tempo após o lançamento do Cilk Plus, a
     Intel tornou pública as especificações da linguagem, permitindo sua
@@ -147,8 +146,8 @@ cilk_for(idx = expr; cond; incr)
 \end{lstlisting}
 \end{block}
 \begin{itemize}
-    \item \texttt{incr} é composto de um limite (\texttt{lim}) e um passo que
-    devem ser avaliados apenas uma vez (imutáveis);
+    \item \texttt{cond} e \texttt{incr} são usados com \texttt{idx} e possuem um
+    limite e um passo que devem ser avaliados apenas uma vez (imutáveis);
     \item O incremento (ou decremento) pode ser expressado com ${ +=, -=, ++,
     --}$.
 \end{itemize}
@@ -673,12 +672,14 @@ _Cilk_for (j = 0; j < n; ++j) {
 
 \subsection{Single Instruction Multiple Data}
 
-\begin{frame}[fragile]{\textit{SIMD}}
+\begin{frame}[fragile]{SIMD}
 \begin{itemize}
-     \item O Cilk Plus possui suporte para SIMD de forma fácil.
-     \item Possibilidade de vetorizar uma função e dizer ao compilador que um segmento deve ser vetorizado
-     \item Usando simplesmente 2 diretivas:
-\begin{lstlisting}
+     \item O Cilk Plus possui suporte para SIMD;
+     \item Isso é feito indicando ao compilador que uma função ou segmento é
+     passível de vetorização;
+     \item São utilizadas as seguintes diretivas:
+
+\begin{lstlisting}[deletekeywords={vector}]
 __declspec (vector)
 #pragma simd [attr]
 \end{lstlisting}
@@ -686,36 +687,31 @@ __declspec (vector)
 \end{frame}
 
 
-\begin{frame}{\_\_declspec (vector)}
-Considerando uma função de multiplicação de a e b
+\begin{frame}[fragile]{\texttt{\_\_declspec (vector)}}
+Considerando uma função de multiplicação de \texttt{a} e \texttt{b}:
 \begin{block}{}
-    float sum(float a,float b)\{ \\
-	return a * b; \\
-\}
-\end{block}
-Para que a soma seja aplicada a um vetor é necessário um for para percorrer todos o elementos
-\begin{block}{}
-    for (int i=0;i<SIZE;i++)\{ \\
-	c[i] = sum(a[i],b[i]); \\
-   \}
-\end{block}
-\end{frame}
-\begin{frame}[fragile]{\_\_declspec (vector)}
-Da mesma forma e possivel vetorizar essa ou outra funco usando \_\_declspec (vector) 
-\begin{block}{}
-     \_\_declspec (vector) float sum(float a,float b) \{ \\
-	return a * b;\\
-\} \\
-/* etc */ \\
-c[:] = sum(a[:],b[:]);
+\begin{lstlisting}
+float mult(float a, float b) {
+    return a * b;
+}
+\end{lstlisting}
 \end{block}
 
+É possível vetorizar essa função usando \texttt{\_\_declspec (vector)}:
+\begin{block}{}
+\begin{lstlisting}[deletekeywords={vector}]
+__declspec (vector) float mult(float a, float b) {
+    return a * b;
+}
+\end{lstlisting}
+\end{block}
 \end{frame}
 
 \begin{frame}[fragile]{\texttt{\#pragma simd}}
 \begin{itemize}
-	\item O \#pragma simd diz ao compilador que o proximo blocco a ser executado deve ser vetorizado
-	\item Cabe ao compilador decidir de há dependencia de dados	
+    \item O \texttt{\#pragma simd} diz ao compilador que o próximo bloco a ser
+    executado deve ser vetorizado;
+	\item Cabe ao compilador verificar se há ou não dependência de dados.
 \end{itemize}
 \begin{block}{}
 \begin{lstlisting}
@@ -728,43 +724,49 @@ for (int i = 0; i < SIZE; i++) {
 \end{frame}
 
 
-\begin{frame}[fragile]{\texttt{Atributos}}
- Existem atributos que podem ser usados tanto no \_\_declspec (vector) quanto no pragma \\
-São usados seguindo a sintaxe exemplo\\
-\#pragma simd reduction(+:sum)
+\begin{frame}[fragile]{Atributos}
+Existem atributos que podem ser usados tanto no \texttt{\_\_declspec (vector)}
+quanto no \texttt{\#pragma simd}. São usados seguindo a seguinte sintaxe:
+
+\begin{lstlisting}
+#pragma simd reduction(+:sum)
+\end{lstlisting}
+
 \begin{itemize}
-	\item \texttt{vectorlength(n1[, n2]...)}  \\
-		 Deve ser multiplo de 2. Define quantas iterações serão usada para cada parametro
+    \item \texttt{vectorlength(n1[, n2]\ldots)}: \\
+        Deve ser múltiplo de 2. Define quantas iterações serão usadas para cada
+        parâmetro.
 	\item \texttt{vectorlengthfor(data type)} \\
-		O parametro deve ser padrão (int,float, double) \\
-		Resume-se a VEC\_SIZE/sizeof(data\_type) sendo o resultado\\
-		aplicado como efeito do vectorlenght
-	\item \texttt{private(var1[, var2]...)} \\
-		Define as variaveis como privadas em cada ciclo
+		O parâmetro deve ser padrão (int, float, double) \\
+        Resume-se a \texttt{VEC\_SIZE / sizeof(data\_type)} sendo o resultado
+        aplicado como efeito do \texttt{vectorlength}.
+	\item \texttt{private(var1[, var2]\ldots)} \\
+		Define as variáveis como privadas em cada ciclo
 \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{Atributos}}
+\begin{frame}[fragile]{Atributos}
 \begin{itemize}
-	\item firstprivate(var1[, var2]...) \\
-		Funciona como o private, mas o valor inicial da variavel é atribuido a todas as iterações
-		paralelas.
-	\item lastprivate(var1[, var2]...)
-		Funciona como o private, mas o valor da utima iteração é atribuido a variavel após
-		a execução.
-	\item linear(var1:step1 [,var2:step2]...)
-		A cada iteração var1 é incrementada em step.
-		var1 =+ step1; var2 += step2 ...
-	\item reduction(oper:var1 [,var2]…)
-		Faz uma redução tendo um operando e uma ou mais váriaveis.
+	\item \texttt{firstprivate(var1[, var2]\ldots)} \\
+        Funciona como o \texttt{private}, mas o valor inicial da variável é
+        atribuido a todas as iterações paralelas.
+	\item \texttt{lastprivate(var1[, var2]\ldots)} \\
+        Funciona como o \texttt{private}, mas o valor da última iteração é
+        atribuído a variável após a execução.
+	\item \texttt{linear(var1:step1 [,var2:step2]\ldots)} \\
+		A cada iteração \texttt{var1} é incrementada em \texttt{step}. \\
+		\texttt{var1 =+ step1; var2 += step2 \ldots}
+	\item \texttt{reduction(oper:var1 [,var2]\ldots)} \\
+		Faz uma redução tendo um operando e uma ou mais variáveis.
 \end{itemize}
 \end{frame}
+
 \section{Análise Comparativa}
 \begin{frame}{Análise Comparativa}
-    Para realizar uma análise de performance do Cilk Plus, foram escolhidos 
-    dois problemas triviais e comparados sua execução com o \textit{OpenMP}:
-\newline
-\begin{columns}
+Para realizar uma análise de performance do Cilk Plus, foram escolhidos dois
+problemas triviais e comparados sua execução com o OpenMP:
+\vspace{0.5cm}
+\begin{columns}[T]
 \begin{column}{0.5\textwidth}
 \centering
 Multiplicação por Escalar
@@ -863,12 +865,8 @@ GRÁFICO DE TEMPOS
     \item Focada em otimizar resultados em processadores da
     Intel\textsuperscript{\textregistered};
     \item Implementa SIMD;
-    \item Proporciona um meio onde o programador não precisa se preocupar com
-    quase nada.
 \end{itemize}
 \end{frame}
-
-
 
 \subsection{Desvantagens}
 \begin{frame}{Desvantagens}
