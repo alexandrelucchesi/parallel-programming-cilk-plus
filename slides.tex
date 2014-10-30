@@ -674,9 +674,9 @@ _Cilk_for (j = 0; j < n; ++j) {
 
 \begin{columns}
 \only<1>{
-\begin{column}{1\textwidth}
+\begin{column}{0.7\textwidth}
 \begin{center}
-\begin{block}{\small Função \textbf{aparar}}
+\begin{block}{\small Função \textbf{aparar} escalar}
 \begin{figure}
 	\includegraphics[scale=0.4]{./img/parvec/serial1.png}
 \end{figure}
@@ -685,9 +685,9 @@ _Cilk_for (j = 0; j < n; ++j) {
 \end{column}
 }
 \only<2>{
-\begin{column}{0.9\textwidth}
+\begin{column}{0.6\textwidth}
 \begin{center}
-\begin{block}{\small Função \textbf{aparar}}
+\begin{block}{\small Função \textbf{aparar} escalar}
 \begin{figure}
 	\includegraphics[scale=0.4]{./img/parvec/serial2.png}
 \end{figure}
@@ -696,9 +696,9 @@ _Cilk_for (j = 0; j < n; ++j) {
 \end{column}
 }
 \only<3>{
-\begin{column}{0.8\textwidth}
+\begin{column}{0.5\textwidth}
 \begin{center}
-\begin{block}{\small Função \textbf{aparar}}
+\begin{block}{\small Função \textbf{aparar} escalar}
 \begin{figure}
 	\includegraphics[scale=0.4]{./img/parvec/serial3.png}
 \end{figure}
@@ -706,12 +706,49 @@ _Cilk_for (j = 0; j < n; ++j) {
 \end{center}
 \end{column}
 }
-\only<4>{
-\begin{column}{0.7\textwidth}
+
+\only<5>{
+\begin{column}{0.4\textwidth}
 \begin{center}
-\begin{block}{\small Função \textbf{aparar}}
+\begin{block}{\small Função \textbf{aparar} vetorial}
+\begin{figure}
+	\includegraphics[scale=0.4]{./img/parvec/funcaoVetorizada.png}
+\end{figure}
+\end{block}
+\end{center}
+\end{column}
+}
+
+\only<4-5>{
+\begin{column}{0.4\textwidth}
+\begin{center}
+\begin{block}{\small Função \textbf{aparar} escalar}
 \begin{figure}
 	\includegraphics[scale=0.4]{./img/parvec/serial4.png}
+\end{figure}
+\end{block}
+\end{center}
+\end{column}
+}
+
+\only<6>{
+\begin{column}{0.4\textwidth}
+\begin{center}
+\begin{block}{\small Função \textbf{aparar} vetorial}
+\begin{figure}
+	\includegraphics[scale=0.4]{./img/parvec/vetorizadaSinistra.png}
+\end{figure}
+\end{block}
+\end{center}
+\end{column}
+}
+
+\only<7>{
+\begin{column}{0.5\textwidth}
+\begin{center}
+\begin{block}{\small Função \textbf{aparar} vetorial paralelizada}
+\begin{figure}
+	\includegraphics[scale=0.4]{./img/parvec/vetorizadaParalelizadaDasGalaxias.png}
 \end{figure}
 \end{block}
 \end{center}
