@@ -791,12 +791,13 @@ Pi de MonteCarlo
 \begin{column}{0.5\textwidth}
 \footnotesize
 \begin{enumerate}
-	\item Tipo da matriz: Inteiros
-    \item Tamanho da matriz: 10000 x 10000
+	\item Tipo da matriz: inteiros
+    \item Tamanho da matriz: 10.000 x 10.000
     \item Valor do escalar: aleatório
-    \item Variação nas \textit{threads}
+    \item Variação no n\textsuperscript{\underline{o}}  de \textit{threads} ou \textit{workers}
 \end{enumerate}
 \end{column}
+\only<1>{
 \begin{column}{0.5\textwidth}
 \begin{figure}
 \centering
@@ -804,7 +805,7 @@ Pi de MonteCarlo
 \begin{axis}[
   title=Tempos de Execução,
   grid=both,
-  ylabel={Tempo(microssegundos)},
+  ylabel={Tempo (segundos)},
   xlabel={\textit{Threads} ou \textit{Workers}},
   xtick=data
 ]
@@ -814,9 +815,128 @@ Pi de MonteCarlo
 \end{axis}
 \end{tikzpicture}
 \end{figure}
-
-
 \end{column}
+}
+
+\only<2>{
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering
+\begin{tikzpicture}[scale=0.7]
+\begin{axis}[
+  title=\textit{Speedup},
+  grid=both,
+  ylabel={Tempo (segundos)},
+  xlabel={\textit{Threads} ou \textit{Workers}},
+  xtick=data
+]
+\addplot table[x=proc,y=openmp]{escalar/speedup.dat};
+\addplot table[x=proc,y=cilk]{escalar/speedup.dat};
+\legend{OpenMP, Cilk Plus}
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+\end{column}
+}
+
+\only<3>{
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering
+\begin{tikzpicture}[scale=0.7]
+\begin{axis}[
+  title=Eficiência,
+  grid=both,
+  ylabel={Tempo (segundos)},
+  xlabel={\textit{Threads} ou \textit{Workers}},
+  xtick=data
+]
+\addplot table[x=proc,y=openmp]{escalar/eficiencia.dat};
+\addplot table[x=proc,y=cilk]{escalar/eficiencia.dat};
+\legend{OpenMP, Cilk Plus}
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+\end{column}
+}
+
+\end{columns}
+\end{frame}
+
+\subsection{Pi de Monte Carlo}
+\begin{frame}{Pi de Monte Carlo}
+    Dados de execução:
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\footnotesize
+\begin{enumerate}
+    \item Quantidade de pontos: 250.000.000
+    \item Variação no n\textsuperscript{\underline{o}}  de \textit{threads} ou \textit{workers}
+\end{enumerate}
+\end{column}
+\only<1>{
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering
+\begin{tikzpicture}[scale=0.7]
+\begin{axis}[
+  title=Tempos de Execução,
+  grid=both,
+  ylabel={Tempo (segundos)},
+  xlabel={\textit{Threads} ou \textit{Workers}},
+  xtick=data
+]
+\addplot table[x=proc,y=openmp]{pi/tempos.dat};
+\addplot table[x=proc,y=cilk]{pi/tempos.dat};
+\legend{OpenMP, Cilk Plus}
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+\end{column}
+}
+
+\only<2>{
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering
+\begin{tikzpicture}[scale=0.7]
+\begin{axis}[
+  title=\textit{Speedup},
+  grid=both,
+  ylabel={Tempo (segundos)},
+  xlabel={\textit{Threads} ou \textit{Workers}},
+  xtick=data
+]
+\addplot table[x=proc,y=openmp]{pi/speedup.dat};
+\addplot table[x=proc,y=cilk]{pi/speedup.dat};
+\legend{OpenMP, Cilk Plus}
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+\end{column}
+}
+
+\only<3>{
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\centering
+\begin{tikzpicture}[scale=0.7]
+\begin{axis}[
+  title=Eficiência,
+  grid=both,
+  ylabel={Tempo (segundos)},
+  xlabel={\textit{Threads} ou \textit{Workers}},
+  xtick=data
+]
+\addplot table[x=proc,y=openmp]{pi/eficiencia.dat};
+\addplot table[x=proc,y=cilk]{pi/eficiencia.dat};
+\legend{OpenMP, Cilk Plus}
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+\end{column}
+}
+
 \end{columns}
 \end{frame}
 
